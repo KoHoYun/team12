@@ -29,3 +29,26 @@ public class makeFrame {
  JTextArea jta2 = new JTextArea();
  JScrollPane scroll = new JScrollPane(jta);
  JScrollPanel scroll2 = new JScrollPane(jta2);
+  
+  public makeFrame() {
+  button.setLayout(new GridLayout(1, 3));
+  button.add(load);
+  button.add(edit);
+  button.add(save);
+  load.addActionListener(new ActionListener() {
+   public void actionPerformed(ActionEvent e) {
+    filechoose.addChoosableFileFilter(new FileNameExtensionFilter("Text file", "txt"));
+    filechoose.setAcceptAllFileFilterUsed(false);
+    int returnVal = filechoose.showOpenDialog(null);
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+     try {
+      File f = filechoose.getSelectedFile();
+      fileopen(f, jta);
+     } catch (Exception event) {
+      return;
+     }
+    }
+   }
+  });
+    
+    edit.addActionListener(new ActionListener() {
