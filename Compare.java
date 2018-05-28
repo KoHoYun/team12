@@ -9,16 +9,15 @@ public class Compare {
 	private int[][] LCStable;
 	private int val_LCS;
 	private int numLine=0;
-	ArrayList<Integer> index = new ArrayList<Integer>();//´Ù¸¥ ºÎºĞÀÇ ÁÙ ¼ö°¡ µé¾îÀÖ´Ù.
+	ArrayList<Integer> index = new ArrayList<Integer>();//ë‹¤ë¥¸ ë¶€ë¶„ì˜ ì¤„ ìˆ˜ê°€ ë“¤ì–´ìˆë‹¤.
 
-	public Compare() throws IOException {
+	public Compare(JTextArea first, JTextArea second) throws IOException {
 		
-		//ÆÄÀÏºÎºĞÀº ³ªÁß¿¡ guiºÎºĞÀÌ¶û ÇÕÃÄ¼­ ¹Ş¾Æ¾ßµÊ
-		File file = new File("test1.txt");
-		File file2 = new File("test2.txt");
+		StringReader read = new StringReader(first.getText());
+		StringReader read2 = new StringReader(second.getText());
 
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		BufferedReader reader2 = new BufferedReader(new FileReader(file2));
+		BufferedReader reader = new BufferedReader(read);
+		BufferedReader reader2 = new BufferedReader(read2);
 
 		String line = null;
 		String line2 = null;
@@ -48,29 +47,31 @@ public class Compare {
 				index.add(numLine);
 			}
 			
-			/* È®ÀÎ¿ë print
+			/* í™•ì¸ìš© print
 			if(!isLineEqual) {
-				System.out.println(line + "¿Í(°ú) " + line2+ "°¡ ´Ù¸¨´Ï´Ù");
+				System.out.println(line + "ì™€(ê³¼) " + line2+ "ê°€ ë‹¤ë¦…ë‹ˆë‹¤");
 			}
 			*/
 		}
 		
-		//2¹øÂ° ÆÄÀÏÀÌ ´õ ±æ¸é ±× ¹øÈ£µµ ³Ö¾îÁØ´Ù.
+		//2ë²ˆì§¸ íŒŒì¼ì´ ë” ê¸¸ë©´ ê·¸ ë²ˆí˜¸ë„ ë„£ì–´ì¤€ë‹¤.
 		while(reader2.readLine() !=null) {
 			index.add(++numLine);
 		}	
-		//gui¿¡¼­ closeÇØ¾ßµÊ.
-		reader.close();
-		reader2.close();
 		
-		//È®ÀÎÇØº¸·Á°í
+		
+		
+		
+		//í™•ì¸í•´ë³´ë ¤ê³ 
 		for(int i=0;i<index.size();i++) {
 			System.out.println(index.get(i));
 		}
+		reader.close();
+		reader2.close();
 		
 	}
 
-	//°°Àº ¹®ÀÚÀÇ °³¼ö¸¦ Ãâ·ÂÇØÁØ´Ù. ¶ç¾î¾²±âµµ ¹®ÀÚ·Î º»´Ù.
+	//ê°™ì€ ë¬¸ìì˜ ê°œìˆ˜ë¥¼ ì¶œë ¥í•´ì¤€ë‹¤. ë„ì–´ì“°ê¸°ë„ ë¬¸ìë¡œ ë³¸ë‹¤.
 	private int LCS(String a, String b) {
 		LCStable= new int[a.length()+1][b.length()+1];
 		int i,j;
