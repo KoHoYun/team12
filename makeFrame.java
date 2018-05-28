@@ -111,11 +111,22 @@ public class makeFrame {
   jta2.setEditable(false);
    
     rightP.setLayout(new GridLayout(3, 1));
+  rightP.add(cmpare);
+  rightP.add(mergeLe);
+  rightP.add(mergeRi);
   rightP.setPreferredSize(new Dimension(100, 550));
-  rightP.setPreferredSize(new Dimension(100, 550));
-  rightP.setPreferredSize(new Dimension(100, 550));
-  rightP.setPreferredSize(new Dimension(100, 550));
-    
+    cmpare.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e)
+      try{
+        new Compare(jta, jta2);
+      }
+      catch(IOException event)
+      {
+        return;
+      }
+    }
+  });
+                           
     jframe.add(leftP, "West");
     jframe.add(rightP,"Center");
     jframe.add(centerP, "East");
