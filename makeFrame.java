@@ -53,14 +53,12 @@ public class makeFrame {
     
     edit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        load.setEnabled(false);
-        jta.setEditable(true);
+        setButton(false, true);
       }
     });
     save.adActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
-        load.setEnabled(true);
-        jta.setEditable(false);
+        setButton(true, false);
       }
     });
     
@@ -89,16 +87,14 @@ public class makeFrame {
     edit2.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e)
       {
-        load2.setEnabled(false);
-        jta2.setEditable(true);
+        setButton2(false, true);
       }
     });
     
     save2.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e)
       {
-        load2.setEnabled(true);
-        jta2.setEditable(false);
+        setButton2(true, false);
       }
     });
     
@@ -130,6 +126,17 @@ public class makeFrame {
   jframe.setDefaultCloseOperation(jframe.EXIT_ON_CLOSE);
 
  }
+  void setButton(boolean a, boolean b)
+  {
+    load.setEnabled(a);
+    jta.setEditable(b);
+  }
+  
+  void setButton2(boolean a, boolean b)
+  {
+    load2.setEnabled(a);
+    jta2.setEditable(b);
+  }
   
   void fileopen(File f, JTextArea a) throws FileNotFoundException, IOException {
   FileReader filereader = new FileReader(f);
