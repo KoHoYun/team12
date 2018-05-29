@@ -97,13 +97,68 @@ public class makeFrame {
 		leftP.setPreferredSize(new Dimension(280, 580));
 		leftP.add(scroll);
 		jta.setEditable(false);
-
+		/**********************************************************************/
+		jta.addMouseListener(new MouseAdapter() {
+		         @Override
+		         public void mouseClicked(MouseEvent e) {
+		         
+		          try {
+					int line = jta.getLineOfOffset(jta.getCaretPosition());
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		          
+		          mergeLe.addActionListener(new ActionListener() {
+		  			public void actionPerformed(ActionEvent e) {		
+		  				//mergeText.mergeToLeft(line)--> 클릭된 줄 라인 번호 넣어주기 
+		  			}
+		  		});
+		          
+		          mergeRi.addActionListener(new ActionListener() {
+		  			public void actionPerformed(ActionEvent e) {		
+		  				//mergeText.mergeToRight(line)--> 클릭된 줄 라인 번호 넣어주기 
+		  			}
+		  		});
+		         }
+		      });
+		
+		
+		/******************************************************************************/
+		/**********************************************************************/
+		jta2.addMouseListener(new MouseAdapter() {
+		         @Override
+		         public void mouseClicked(MouseEvent e) {
+		         
+		          try {
+					int line = jta.getLineOfOffset(jta.getCaretPosition());
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		          
+		          mergeLe.addActionListener(new ActionListener() {
+		  			public void actionPerformed(ActionEvent e) {		
+		  				//mergeText.mergeToLeft(line)--> 클릭된 줄 라인 번호 넣어주기 
+		  			}
+		  		});
+		          
+		          mergeRi.addActionListener(new ActionListener() {
+		  			public void actionPerformed(ActionEvent e) {		
+		  				//mergeText.mergeToRight(line)--> 클릭된 줄 라인 번호 넣어주기 
+		  			}
+		  		});
+		         }
+		      });
+		
+		
+		/******************************************************************************/
 		centerP.setLayout(new GridLayout(2, 1));
 		centerP.add(button2);
 		centerP.setPreferredSize(new Dimension(280, 580));
 		centerP.add(scroll2);
 		jta2.setEditable(false);
-
+		
 		rightP.setLayout(new GridLayout(3, 1));
 		rightP.add(cmpare);
 		rightP.add(mergeLe);
@@ -123,16 +178,7 @@ public class makeFrame {
 				
 			}
 		});
-		mergeLe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {		
-				//mergeText.mergeToLeft()--> 클릭된 줄 라인 번호 넣어주기 
-			}
-		});
-		mergeRi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {		
-				//mergeText.mergeToRight()--> 클릭된 줄 라인 번호 넣어주기 
-			}
-		});
+		
 		jframe.add(leftP, "West");
 		jframe.add(rightP, "Center");
 		jframe.add(centerP, "East");
