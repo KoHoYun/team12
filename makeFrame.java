@@ -114,6 +114,7 @@ public class makeFrame {
 				try
 				{
 					new Compare(jta, jta2);
+					//mergeText에 결과 textarea 두개 넣어주기 어레이리스트도? 
 				}
 				catch(IOException event)
 				{
@@ -122,7 +123,16 @@ public class makeFrame {
 				
 			}
 		});
-		
+		mergeLe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {		
+				//mergeText.mergeToLeft()--> 클릭된 줄 라인 번호 넣어주기 
+			}
+		});
+		mergeRi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {		
+				//mergeText.mergeToRight()--> 클릭된 줄 라인 번호 넣어주기 
+			}
+		});
 		jframe.add(leftP, "West");
 		jframe.add(rightP, "Center");
 		jframe.add(centerP, "East");
