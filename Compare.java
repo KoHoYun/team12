@@ -1,7 +1,9 @@
-package compare;
+package simple_merge;
 
 import java.io.*;
 import java.util.*;
+
+import javax.swing.JTextArea;
 
 public class Compare {
 
@@ -9,7 +11,7 @@ public class Compare {
 	private int[][] LCStable;
 	private int val_LCS;
 	private int numLine=0;
-	ArrayList<Integer> index = new ArrayList<Integer>();//ë‹¤ë¥¸ ë¶€ë¶„ì˜ ì¤„ ìˆ˜ê°€ ë“¤ì–´ìˆë‹¤.
+	ArrayList<Integer> index = new ArrayList<Integer>();//´Ù¸¥ ºÎºĞÀÇ ÁÙ ¼ö°¡ µé¾îÀÖ´Ù.
 
 	public Compare(JTextArea first, JTextArea second) throws IOException {
 		
@@ -47,14 +49,14 @@ public class Compare {
 				index.add(numLine);
 			}
 			
-			/* í™•ì¸ìš© print
+			/* È®ÀÎ¿ë print
 			if(!isLineEqual) {
-				System.out.println(line + "ì™€(ê³¼) " + line2+ "ê°€ ë‹¤ë¦…ë‹ˆë‹¤");
+				System.out.println(line + "¿Í(°ú) " + line2+ "°¡ ´Ù¸¨´Ï´Ù");
 			}
 			*/
 		}
 		
-		//2ë²ˆì§¸ íŒŒì¼ì´ ë” ê¸¸ë©´ ê·¸ ë²ˆí˜¸ë„ ë„£ì–´ì¤€ë‹¤.
+		//2¹øÂ° ÆÄÀÏÀÌ ´õ ±æ¸é ±× ¹øÈ£µµ ³Ö¾îÁØ´Ù.
 		while(reader2.readLine() !=null) {
 			index.add(++numLine);
 		}	
@@ -62,7 +64,7 @@ public class Compare {
 		
 		
 		
-		//í™•ì¸í•´ë³´ë ¤ê³ 
+		//È®ÀÎÇØº¸·Á°í
 		for(int i=0;i<index.size();i++) {
 			System.out.println(index.get(i));
 		}
@@ -71,7 +73,7 @@ public class Compare {
 		
 	}
 
-	//ê°™ì€ ë¬¸ìì˜ ê°œìˆ˜ë¥¼ ì¶œë ¥í•´ì¤€ë‹¤. ë„ì–´ì“°ê¸°ë„ ë¬¸ìë¡œ ë³¸ë‹¤.
+	//°°Àº ¹®ÀÚÀÇ °³¼ö¸¦ Ãâ·ÂÇØÁØ´Ù. ¶ç¾î¾²±âµµ ¹®ÀÚ·Î º»´Ù.
 	private int LCS(String a, String b) {
 		LCStable= new int[a.length()+1][b.length()+1];
 		int i,j;
