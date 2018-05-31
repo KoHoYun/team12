@@ -4,6 +4,7 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.filechooser.*;
+import javax.swing.text.BadLocationException;
 
 //jframe으로 판 만들기
 public class makeFrame {
