@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.filechooser.*;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Utilities;
 
 //jframe으로 판 만들기
 public class makeFrame {
@@ -27,8 +29,8 @@ public class makeFrame {
 	private JButton mergeRi = new JButton("merge >>");
 	private JButton mergeLe = new JButton("merge <<");
 
-	JTextArea jta = new JTextArea();
-	JTextArea jta2 = new JTextArea();
+	JTextPane jta = new JTextPane();
+	JTextPane jta2 = new JTextPane();
 	JScrollPane scroll = new JScrollPane(jta);
 	JScrollPane scroll2 = new JScrollPane(jta2);
 
@@ -78,6 +80,9 @@ public class makeFrame {
 						fileopen(f, jta2);
 					} catch (IOException event) {
 						return;
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				}
 			}
@@ -100,86 +105,91 @@ public class makeFrame {
 		jta.setEditable(false);
 		/**********************************************************************/
 		jta.addMouseListener(new MouseAdapter() {
-		         @Override
-		         public void mouseClicked(MouseEvent e) {
-		         
-		          try {
-					int line = jta.getLineOfOffset(jta.getCaretPosition());
-				} catch (BadLocationException e1) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				try {
+					int caretPos = jta.getCaretPosition();
+					int rowNum = (caretPos == 0) ? 1 : 0;
+					for(int offset = caretPos ; offset>0;) {
+					offset = Utilities.getRowStart(jta, offset)-1;
+					rowNum++;
+					}
+				}catch (BadLocationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-		          
-		          mergeLe.addActionListener(new ActionListener() {
-		  			public void actionPerformed(ActionEvent e) {		
-		  				//mergeText.mergeToLeft(line)--> 클릭된 줄 라인 번호 넣어주기 
-		  			}
-		  		});
-		          
-		          mergeRi.addActionListener(new ActionListener() {
-		  			public void actionPerformed(ActionEvent e) {		
-		  				//mergeText.mergeToRight(line)--> 클릭된 줄 라인 번호 넣어주기 
-		  			}
-		  		});
-		         }
-		      });
-		
-		
+
+				mergeLe.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// mergeText.mergeToLeft(line)--> 클릭된 줄 라인 번호 넣어주기
+					}
+				});
+
+				mergeRi.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// mergeText.mergeToRight(line)--> 클릭된 줄 라인 번호 넣어주기
+					}
+				});
+			}
+		});
+
 		/******************************************************************************/
 		/**********************************************************************/
 		jta2.addMouseListener(new MouseAdapter() {
-		         @Override
-		         public void mouseClicked(MouseEvent e) {
-		         
-		          try {
-					int line = jta.getLineOfOffset(jta.getCaretPosition());
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				try {
+					int caretPos = jta2.getCaretPosition();
+					int rowNum = (caretPos == 0) ? 1 : 0;
+					for(int offset = caretPos ; offset>0;) {
+					offset = Utilities.getRowStart(jta2, offset)-1;
+					rowNum++;
+					}
 				} catch (BadLocationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-		          
-		          mergeLe.addActionListener(new ActionListener() {
-		  			public void actionPerformed(ActionEvent e) {		
-		  				//mergeText.mergeToLeft(line)--> 클릭된 줄 라인 번호 넣어주기 
-		  			}
-		  		});
-		          
-		          mergeRi.addActionListener(new ActionListener() {
-		  			public void actionPerformed(ActionEvent e) {		
-		  				//mergeText.mergeToRight(line)--> 클릭된 줄 라인 번호 넣어주기 
-		  			}
-		  		});
-		         }
-		      });
-		
-		
+
+				mergeLe.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// mergeText.mergeToLeft(line)--> 클릭된 줄 라인 번호 넣어주기
+					}
+				});
+
+				mergeRi.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// mergeText.mergeToRight(line)--> 클릭된 줄 라인 번호 넣어주기
+					}
+				});
+			}
+		});
+
 		/******************************************************************************/
 		centerP.setLayout(new GridLayout(2, 1));
 		centerP.add(button2);
 		centerP.setPreferredSize(new Dimension(280, 580));
 		centerP.add(scroll2);
 		jta2.setEditable(false);
-		
+
 		rightP.setLayout(new GridLayout(3, 1));
 		rightP.add(cmpare);
 		rightP.add(mergeLe);
 		rightP.add(mergeRi);
 		rightP.setPreferredSize(new Dimension(100, 550));
 		cmpare.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {		
-				try
-				{
+			public void actionPerformed(ActionEvent e) {
+				try {
 					new Compare(jta, jta2);
-					//mergeText에 결과 textarea 두개 넣어주기 어레이리스트도? 
-				}
-				catch(IOException event)
-				{
+					// mergeText에 결과 textarea 두개 넣어주기 어레이리스트도?
+				} catch (IOException event) {
 					return;
 				}
-				
+
 			}
 		});
-		
+
 		jframe.add(leftP, "West");
 		jframe.add(rightP, "Center");
 		jframe.add(centerP, "East");
@@ -201,19 +211,18 @@ public class makeFrame {
 		jta2.setEditable(b);
 	}
 
-	void fileopen(File f, JTextArea a) throws FileNotFoundException, IOException {
+	void fileopen(File f, JTextPane a) throws FileNotFoundException, IOException, BadLocationException {
 		FileReader filereader = new FileReader(f);
 		BufferedReader reader = new BufferedReader(filereader);
-
 		String line = null;
 		// textarea에 이미 다른 파일이 열려 있는 경우
 		if (a != null) {
 			a.setText("");
 		}
+		a.setText(reader.readLine());
 		// line으로 받아서 text 다 읽을 때까지 textarea에 새롭게 추가시킴
 		while ((line = reader.readLine()) != null) {
-			a.append(line);
-			a.append("\n");
+			a.setText(a.getText() + "\n" + line);
 		}
 		reader.close();
 	}
