@@ -47,7 +47,7 @@ public class makeFrame {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					try {
 						File f = filechoose.getSelectedFile();
-						fileopen(f, jta);
+						new openFile(f, jta);
 					} catch (Exception event) {
 						return;
 					}
@@ -77,12 +77,9 @@ public class makeFrame {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					try {
 						File f = filechoose.getSelectedFile();
-						fileopen(f, jta2);
+						new openFile(f, jta2);
 					} catch (IOException event) {
 						return;
-					} catch (BadLocationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
 				}
 			}
@@ -209,21 +206,5 @@ public class makeFrame {
 	void setButton2(boolean a, boolean b) {
 		load2.setEnabled(a);
 		jta2.setEditable(b);
-	}
-
-	void fileopen(File f, JTextPane a) throws FileNotFoundException, IOException, BadLocationException {
-		FileReader filereader = new FileReader(f);
-		BufferedReader reader = new BufferedReader(filereader);
-		String line = null;
-		// textarea에 이미 다른 파일이 열려 있는 경우
-		if (a != null) {
-			a.setText("");
-		}
-		a.setText(reader.readLine());
-		// line으로 받아서 text 다 읽을 때까지 textarea에 새롭게 추가시킴
-		while ((line = reader.readLine()) != null) {
-			a.setText(a.getText() + "\n" + line);
-		}
-		reader.close();
 	}
 }
