@@ -119,9 +119,9 @@ public class View extends JFrame {
     
     main.add(Frame, "Center");
     
-    Frame.add(leftcode);
+    Frame.add(scroll1);
     Frame.add(CMbtns);
-    Frame.add(rightcode);
+    Frame.add(scroll2);
 
     
     mergeBtn1.addActionListener(new ActionListener() {
