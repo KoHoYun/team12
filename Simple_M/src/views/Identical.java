@@ -22,6 +22,7 @@ public class Identical {
 			}
 		});
 		
+		jframe.setLocationRelativeTo(null);
 		jframe.setSize(200, 200);
 		jframe.setVisible(bool);
 		jframe.setDefaultCloseOperation(jframe.EXIT_ON_CLOSE);
