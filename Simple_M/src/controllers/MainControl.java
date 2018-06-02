@@ -53,7 +53,6 @@ public class MainControl {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 파일 save 할 수 있게
 				new Save_control(theView.saveBtn1, getTextLeft(),e);
 			}
 		});
@@ -62,7 +61,7 @@ public class MainControl {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 파일 save 할 수 있게
+				
 				new Save_control(theView.saveBtn2, getTextRight(),e);
 			}
 		});
@@ -71,14 +70,14 @@ public class MainControl {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						new Compare_control(getTextLeft(), getTextRight());
-						// mergeText에 결과 textarea 두개 넣어주기 어레이리스트도?
+						// mergeText
 					} catch (IOException event) {
 						return;
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-
+					theView.compareBtn.setEnabled(false);
 				}
 			});
 	}
