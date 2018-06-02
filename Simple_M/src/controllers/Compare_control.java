@@ -47,9 +47,9 @@ public class Compare_control {
 		offset = getOffset(first);
 		offset2 = getOffset(second);
 
-		if (!s.hasNextLine() && !s2.hasNextLine()) {// 두파일 모두 빈경우
+		if (!s.hasNextLine() && !s2.hasNextLine()) {// �몢�뙆�씪 紐⑤몢 鍮덇꼍�슦
 			isEqual = true;
-			new Identical();
+			new Identical_control(true);
 		}
 
 		while (s.hasNextLine() && s2.hasNextLine()) {
@@ -64,21 +64,21 @@ public class Compare_control {
 				insert(second, Color.black, Color.black, "\n%");
 			}
 			
-			if (LCS(line, line2) != MAX(line.length(), line2.length())) {// 두 문자열이 다른경우들
+			if (LCS(line, line2) != MAX(line.length(), line2.length())) {// �몢 臾몄옄�뿴�씠 �떎瑜멸꼍�슦�뱾
 				isEqual2 = false;
 				
 				if (line.length() != 0 && line2.length() != 0) {
 					rightHas = hasEqual(right_num, line, second);
 					leftHas = hasEqual(left_num, line2, first);
 
-					// 파일 밑에 어딘가 존재한다는 뜻
-					if (rightHas == right_num && leftHas == left_num) {// 그냥 둘이 다른문자다.
+					// �뙆�씪 諛묒뿉 �뼱�뵖媛� 議댁옱�븳�떎�뒗 �쑜
+					if (rightHas == right_num && leftHas == left_num) {// 洹몃깷 �몮�씠 �떎瑜몃Ц�옄�떎.
 						inLineDiff(line, line2, first, second);
 						insert(first, Color.black, Color.black, "");
 						insert(second, Color.black, Color.black, "");
 
 					} else {
-						if (rightHas == right_num && leftHas != left_num) {// 오른쪽 파일에 공백이 추가되어야 한다. 왼:노란색 오른:회색
+						if (rightHas == right_num && leftHas != left_num) {// �삤瑜몄そ �뙆�씪�뿉 怨듬갚�씠 異붽��릺�뼱�빞 �븳�떎. �쇊:�끂���깋 �삤瑜�:�쉶�깋
 							
 							spaceNum = leftHas - left_num;
 							for (i = 0; i < spaceNum; i++) {
@@ -119,19 +119,19 @@ public class Compare_control {
 							insert(first, Color.BLACK, Color.WHITE, line);
 							insert(second, Color.BLACK, Color.WHITE, line2);
 							//addSpace(spaceNum, lineNum, rightHas, right_num, line2, line, second, first, s2);
-						} else {// rightHas 우선으로 하자
+						} else {// rightHas �슦�꽑�쑝濡� �븯�옄
 							
 						}
 					}
 
 				}
 
-				else if (line.length() == 0 && line2.length() != 0) {// 공백,~공백
+				else if (line.length() == 0 && line2.length() != 0) {// 怨듬갚,~怨듬갚
 					leftHas = hasEqual(left_num, line2, first);
-					if (leftHas == left_num) {// 밑에 동일한거 없다.
+					if (leftHas == left_num) {// 諛묒뿉 �룞�씪�븳嫄� �뾾�떎.
 						insert(first, Color.BLACK, Color.YELLOW, whenNull);
 						insert(second, Color.BLACK, Color.YELLOW, line2);
-					} else {// 왼 공백수만큼 노랑, 오 공백수만큼 회색
+					} else {// �쇊 怨듬갚�닔留뚰겮 �끂�옉, �삤 怨듬갚�닔留뚰겮 �쉶�깋
 						spaceNum = leftHas - left_num;
 						for (i = 0; i < spaceNum; i++) {
 							if (line.length() != 0) {
@@ -153,12 +153,12 @@ public class Compare_control {
 						
 						//addSpace(spaceNum, lineNum, leftHas, left_num, line, line2, first, second, s);
 					}
-				} else {// ~공백, 공백
+				} else {// ~怨듬갚, 怨듬갚
 					rightHas = hasEqual(right_num, line, second);
-					if (rightHas == right_num) {// 밑에 동일한거 없다.
+					if (rightHas == right_num) {// 諛묒뿉 �룞�씪�븳嫄� �뾾�떎.
 						insert(first, Color.BLACK, Color.YELLOW, line);
 						insert(second, Color.BLACK, Color.YELLOW, whenNull);
-					} else {// 왼 공백수만큼 노랑, 오 공백수만큼 회색
+					} else {// �쇊 怨듬갚�닔留뚰겮 �끂�옉, �삤 怨듬갚�닔留뚰겮 �쉶�깋
 						spaceNum = rightHas - right_num;
 						for (i = 0; i < spaceNum; i++) {
 							if (line2.length() != 0) {
@@ -182,11 +182,8 @@ public class Compare_control {
 			}
 
 			else {
-
-				// 같은 문자 추가
 				insert(first, Color.BLACK, Color.WHITE, line);
 				insert(second, Color.BLACK, Color.WHITE, line2);
-				System.out.println("identical line");
 			}
 
 		}
@@ -204,20 +201,18 @@ public class Compare_control {
 		}
 
 		if (!isEqual || !isEqual2) {
-			// 넣어줬던거 지워준다
+			// �꽔�뼱以щ뜕嫄� 吏��썙以��떎
 			remove(first, offset + 3);
 			remove(second, offset2 + 3);
 		}
 		if (isEqual2) {
-			new Identical();
+			new Identical_control(true);
 		}
 
 		reader.close();
 		reader2.close();
 	}
-	// a와 b의 동일한 문자 개수 출력
 
-	// 같은 문자의 개수를 출력해준다. 띄어쓰기도 문자로 본다.
 	private int LCS(String a, String b) {
 		LCStable = new int[a.length() + 1][b.length() + 1];
 		int i, j;
@@ -282,21 +277,21 @@ public class Compare_control {
 
 		StyledDocument doc = textP.getStyledDocument();
 		Style style = textP.addStyle("String", null);
-		StyleConstants.setForeground(style, foreG);// 글자색
-		StyleConstants.setBackground(style, backG);// 배경색
-		// 넣는법고민...
+		StyleConstants.setForeground(style, foreG);// 湲��옄�깋
+		StyleConstants.setBackground(style, backG);// 諛곌꼍�깋
+		// �꽔�뒗踰뺢퀬誘�...
 		doc.insertString(doc.getLength(), line + "\n", style);
 
 		// doc.setParagraphAttributes(arg0, line.length(), style, true);
 	}
 
-	// 한 라인안에서 다른 부분 있을때 다른부분 색칠
+	// �븳 �씪�씤�븞�뿉�꽌 �떎瑜� 遺�遺� �엳�쓣�븣 �떎瑜몃�遺� �깋移�
 	private void inLineDiff(String l, String l2, JTextPane tP, JTextPane tP2) throws Exception {
 		String[] part = l.split("\\s");
 		String[] part2 = l2.split("\\s");
 		// ArrayList<String> p = new ArrayList<String>();
 		// ArrayList<String> p2 = new ArrayList<String>();
-		// arraylist에 넣어주기
+		// arraylist�뿉 �꽔�뼱二쇨린
 		int j = 0;
 		for (j = 0; j < part.length - 1; j++) {
 			part[j] = part[j].toString() + " ";
@@ -348,9 +343,9 @@ public class Compare_control {
 	private void insert_word(JTextPane textP, Color foreG, Color backG, String line) throws Exception {
 		StyledDocument doc = textP.getStyledDocument();
 		Style style = textP.addStyle("String", null);
-		StyleConstants.setForeground(style, foreG);// 글자색
-		StyleConstants.setBackground(style, backG);// 배경색
-		// 넣는법고민...
+		StyleConstants.setForeground(style, foreG);
+		StyleConstants.setBackground(style, backG);
+		
 		doc.insertString(doc.getLength(), line, style);
 	}
 	
