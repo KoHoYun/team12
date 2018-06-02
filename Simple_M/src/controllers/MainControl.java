@@ -54,6 +54,7 @@ public class MainControl {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Save_control(theView.saveBtn1, getTextLeft(),e);
+				theView.loadBtn1.setEnabled(true);
 			}
 		});
 		
@@ -63,6 +64,7 @@ public class MainControl {
 			public void actionPerformed(ActionEvent e) {
 				
 				new Save_control(theView.saveBtn2, getTextRight(),e);
+				theView.loadBtn2.setEnabled(true);
 			}
 		});
 		
@@ -77,7 +79,7 @@ public class MainControl {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					theView.compareBtn.setEnabled(false);
+					//theView.compareBtn.setEnabled(false);
 				}
 			});
 	}
