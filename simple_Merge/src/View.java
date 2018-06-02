@@ -1,5 +1,3 @@
-
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -78,11 +76,11 @@ public class View extends JFrame {
 	
 	JMenuBar bar = new JMenuBar();
 	JMenu help = new JMenu("Help");
-	JMenuItem mi = new JMenuItem("µµ¿ò¸»");
+	JMenuItem mi = new JMenuItem("ë„ì›€ë§");
 	bar.add(help);
 	help.add(mi);
 	view.add(jp, "Center");
-	mi.setMnemonic('F'); //´ÜÃàÅ° F
+	mi.setMnemonic('F'); //ë‹¨ì¶•í‚¤ F
 	view.setJMenuBar(bar);
 	
 	leftcode.setEditable(false);
@@ -112,7 +110,7 @@ public class View extends JFrame {
     CMbtns.add(mergeBtn2);
 
 
-    main.add(buttons, "North"); //buttonÀÌ ´ã±ä ÆĞ³ÎÀ» main ÆĞ³Î¿¡ 
+    main.add(buttons, "North"); //buttonì´ ë‹´ê¸´ íŒ¨ë„ì„ main íŒ¨ë„ì— 
     
     JPanel Frame = new JPanel();
     Frame.setLayout(new BoxLayout(Frame, BoxLayout.X_AXIS));
