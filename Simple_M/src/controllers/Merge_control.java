@@ -13,7 +13,11 @@ import javax.swing.text.Utilities;
 
 public class Merge_control {
 	
-		int lineNum = 0;
+		public Merge_control() {
+		
+	}
+	
+		
 		
 	public Merge_control(JTextPane first, JTextPane second,int pos){
 		Document doc1 = first.getStyledDocument();
