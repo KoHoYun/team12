@@ -13,7 +13,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 public class Compare_control {
-	
+
 	private int[][] LCStable;
 
 	private int offset;
@@ -31,6 +31,9 @@ public class Compare_control {
 	private int right_num = 0;
 	private boolean isEqual = false;
 	private boolean isEqual2 = true;
+	private ArrayList<Character> temp = new ArrayList<Character>();
+	private ArrayList<Character> temp2 = new ArrayList<Character>();
+	
 
 	public Compare_control(JTextPane first, JTextPane second) throws IOException, Exception {
 
@@ -47,9 +50,8 @@ public class Compare_control {
 		offset = getOffset(first);
 		offset2 = getOffset(second);
 
-		if (!s.hasNextLine() && !s2.hasNextLine()) {// �몢�뙆�씪 紐⑤몢 鍮덇꼍�슦
+		if (!s.hasNextLine() && !s2.hasNextLine()) {// 占쎈あ占쎈솁占쎌뵬 筌뤴뫀紐� �뜮�뜃瑗랃옙�뒭
 			isEqual = true;
-			new Identical_control(true);
 		}
 
 		while (s.hasNextLine() && s2.hasNextLine()) {
@@ -63,23 +65,81 @@ public class Compare_control {
 				insert(first, Color.black, Color.black, "\n%");
 				insert(second, Color.black, Color.black, "\n%");
 			}
-			
-			if (LCS(line, line2) != MAX(line.length(), line2.length())) {// �몢 臾몄옄�뿴�씠 �떎瑜멸꼍�슦�뱾
+
+			if (LCS(line, line2) != MAX(line.length(), line2.length())) {// 占쎈あ �눧紐꾩쁽占쎈였占쎌뵠 占쎈뼄�몴硫멸펾占쎌뒭占쎈굶
 				isEqual2 = false;
-				
-				if (line.length() != 0 && line2.length() != 0) {
-					rightHas = hasEqual(right_num, line, second);
-					leftHas = hasEqual(left_num, line2, first);
+				if (line_check(line, line2)) {
+					insert(first, Color.BLACK, Color.YELLOW, line);
+					insert(second, Color.BLACK, Color.YELLOW, line2);
+				} else {
+					if (line.length() != 0 && line2.length() != 0) {
+						rightHas = hasEqual(right_num, line, second);
+						leftHas = hasEqual(left_num, line2, first);
 
-					// �뙆�씪 諛묒뿉 �뼱�뵖媛� 議댁옱�븳�떎�뒗 �쑜
-					if (rightHas == right_num && leftHas == left_num) {// 洹몃깷 �몮�씠 �떎瑜몃Ц�옄�떎.
-						inLineDiff(line, line2, first, second);
-						insert(first, Color.black, Color.black, "");
-						insert(second, Color.black, Color.black, "");
+						// 占쎈솁占쎌뵬 獄쏅쵐肉� 占쎈선占쎈탺揶쏉옙 鈺곕똻�삺占쎈립占쎈뼄占쎈뮉 占쎌몴
+						if (rightHas == right_num && leftHas == left_num) {// 域밸챶源� 占쎈ぎ占쎌뵠 占쎈뼄�몴紐꺪�占쎌쁽占쎈뼄.
+							inLineDiff(line, line2, first, second);
+							insert(first, Color.black, Color.black, "");
+							insert(second, Color.black, Color.black, "");
 
-					} else {
-						if (rightHas == right_num && leftHas != left_num) {// �삤瑜몄そ �뙆�씪�뿉 怨듬갚�씠 異붽��릺�뼱�빞 �븳�떎. �쇊:�끂���깋 �삤瑜�:�쉶�깋
-							
+						} else {
+							if (rightHas == right_num && leftHas != left_num) {// 占쎌궎�몴紐꾠걹 占쎈솁占쎌뵬占쎈퓠 �⑤벉媛싷옙�뵠
+																				// �빊遺쏙옙占쎈┷占쎈선占쎈튊 占쎈립占쎈뼄. 占쎌뇢:占쎈걗占쏙옙占쎄퉳
+																				// 占쎌궎�몴占�:占쎌돳占쎄퉳
+
+								spaceNum = leftHas - left_num;
+								for (i = 0; i < spaceNum; i++) {
+									if (line.length() != 0) {
+										insert(first, Color.BLACK, Color.YELLOW, line);
+									} else {
+										insert(first, Color.BLACK, Color.YELLOW, whenNull);
+									}
+									insert(second, Color.BLACK, Color.GRAY, whenNull);
+									if (s.hasNextLine()) {
+										line = s.nextLine();
+										left_num++;
+									}
+								}
+								lineNum += spaceNum;
+								insert(first, Color.BLACK, Color.WHITE, line);
+								insert(second, Color.BLACK, Color.WHITE, line2);
+
+								// addSpace(spaceNum, lineNum, leftHas, left_num, line, line2, first, second,
+								// s);
+							}
+
+							else if (rightHas != right_num && leftHas == left_num) {
+								spaceNum = rightHas - right_num;
+								for (i = 0; i < spaceNum; i++) {
+									if (line2.length() != 0) {
+										insert(second, Color.BLACK, Color.YELLOW, line2);
+									} else {
+										insert(second, Color.BLACK, Color.YELLOW, whenNull);
+									}
+									insert(first, Color.BLACK, Color.GRAY, whenNull);
+									if (s2.hasNextLine()) {
+										line2 = s2.nextLine();
+										right_num++;
+									}
+								}
+								lineNum += spaceNum;
+								insert(first, Color.BLACK, Color.WHITE, line);
+								insert(second, Color.BLACK, Color.WHITE, line2);
+								// addSpace(spaceNum, lineNum, rightHas, right_num, line2, line, second, first,
+								// s2);
+							} else {// rightHas 占쎌뒭占쎄퐨占쎌몵嚥∽옙 占쎈릭占쎌쁽
+
+							}
+						}
+
+					}
+
+					else if (line.length() == 0 && line2.length() != 0) {// �⑤벉媛�,~�⑤벉媛�
+						leftHas = hasEqual(left_num, line2, first);
+						if (leftHas == left_num) {// 獄쏅쵐肉� 占쎈짗占쎌뵬占쎈립椰꾬옙 占쎈씨占쎈뼄.
+							insert(first, Color.BLACK, Color.YELLOW, whenNull);
+							insert(second, Color.BLACK, Color.YELLOW, line2);
+						} else {// 占쎌뇢 �⑤벉媛싷옙�땾筌띾슦寃� 占쎈걗占쎌삂, 占쎌궎 �⑤벉媛싷옙�땾筌띾슦寃� 占쎌돳占쎄퉳
 							spaceNum = leftHas - left_num;
 							for (i = 0; i < spaceNum; i++) {
 								if (line.length() != 0) {
@@ -87,6 +147,7 @@ public class Compare_control {
 								} else {
 									insert(first, Color.BLACK, Color.YELLOW, whenNull);
 								}
+
 								insert(second, Color.BLACK, Color.GRAY, whenNull);
 								if (s.hasNextLine()) {
 									line = s.nextLine();
@@ -96,19 +157,24 @@ public class Compare_control {
 							lineNum += spaceNum;
 							insert(first, Color.BLACK, Color.WHITE, line);
 							insert(second, Color.BLACK, Color.WHITE, line2);
-							
-							//addSpace(spaceNum, lineNum, leftHas, left_num, line, line2, first, second, s);
+
+							// addSpace(spaceNum, lineNum, leftHas, left_num, line, line2, first, second,
+							// s);
 						}
-						
-						
-						else if (rightHas != right_num && leftHas == left_num) {
+					} else {// ~�⑤벉媛�, �⑤벉媛�
+						rightHas = hasEqual(right_num, line, second);
+						if (rightHas == right_num) {// 獄쏅쵐肉� 占쎈짗占쎌뵬占쎈립椰꾬옙 占쎈씨占쎈뼄.
+							insert(first, Color.BLACK, Color.YELLOW, line);
+							insert(second, Color.BLACK, Color.YELLOW, whenNull);
+						} else {// 占쎌뇢 �⑤벉媛싷옙�땾筌띾슦寃� 占쎈걗占쎌삂, 占쎌궎 �⑤벉媛싷옙�땾筌띾슦寃� 占쎌돳占쎄퉳
 							spaceNum = rightHas - right_num;
 							for (i = 0; i < spaceNum; i++) {
 								if (line2.length() != 0) {
-									insert(second, Color.BLACK, Color.YELLOW, line2);
+									insert(second, Color.BLACK, Color.YELLOW, line);
 								} else {
 									insert(second, Color.BLACK, Color.YELLOW, whenNull);
 								}
+
 								insert(first, Color.BLACK, Color.GRAY, whenNull);
 								if (s2.hasNextLine()) {
 									line2 = s2.nextLine();
@@ -118,65 +184,9 @@ public class Compare_control {
 							lineNum += spaceNum;
 							insert(first, Color.BLACK, Color.WHITE, line);
 							insert(second, Color.BLACK, Color.WHITE, line2);
-							//addSpace(spaceNum, lineNum, rightHas, right_num, line2, line, second, first, s2);
-						} else {// rightHas �슦�꽑�쑝濡� �븯�옄
-							
+							// addSpace(spaceNum, lineNum, rightHas, right_num, line2, line, second, first,
+							// s2);
 						}
-					}
-
-				}
-
-				else if (line.length() == 0 && line2.length() != 0) {// 怨듬갚,~怨듬갚
-					leftHas = hasEqual(left_num, line2, first);
-					if (leftHas == left_num) {// 諛묒뿉 �룞�씪�븳嫄� �뾾�떎.
-						insert(first, Color.BLACK, Color.YELLOW, whenNull);
-						insert(second, Color.BLACK, Color.YELLOW, line2);
-					} else {// �쇊 怨듬갚�닔留뚰겮 �끂�옉, �삤 怨듬갚�닔留뚰겮 �쉶�깋
-						spaceNum = leftHas - left_num;
-						for (i = 0; i < spaceNum; i++) {
-							if (line.length() != 0) {
-								insert(first, Color.BLACK, Color.YELLOW, line);
-							} else {
-								insert(first, Color.BLACK, Color.YELLOW, whenNull);
-							}
-
-							insert(second, Color.BLACK, Color.GRAY, whenNull);
-							if (s.hasNextLine()) {
-								line = s.nextLine();
-								left_num++;
-							}
-						}
-						lineNum += spaceNum;
-						insert(first, Color.BLACK, Color.WHITE, line);
-						insert(second, Color.BLACK, Color.WHITE, line2);
-						
-						
-						//addSpace(spaceNum, lineNum, leftHas, left_num, line, line2, first, second, s);
-					}
-				} else {// ~怨듬갚, 怨듬갚
-					rightHas = hasEqual(right_num, line, second);
-					if (rightHas == right_num) {// 諛묒뿉 �룞�씪�븳嫄� �뾾�떎.
-						insert(first, Color.BLACK, Color.YELLOW, line);
-						insert(second, Color.BLACK, Color.YELLOW, whenNull);
-					} else {// �쇊 怨듬갚�닔留뚰겮 �끂�옉, �삤 怨듬갚�닔留뚰겮 �쉶�깋
-						spaceNum = rightHas - right_num;
-						for (i = 0; i < spaceNum; i++) {
-							if (line2.length() != 0) {
-								insert(second, Color.BLACK, Color.YELLOW, line);
-							} else {
-								insert(second, Color.BLACK, Color.YELLOW, whenNull);
-							}
-
-							insert(first, Color.BLACK, Color.GRAY, whenNull);
-							if (s2.hasNextLine()) {
-								line2 = s2.nextLine();
-								right_num++;
-							}
-						}
-						lineNum += spaceNum;
-						insert(first, Color.BLACK, Color.WHITE, line);
-						insert(second, Color.BLACK, Color.WHITE, line2);
-						//addSpace(spaceNum, lineNum, rightHas, right_num, line2, line, second, first, s2);
 					}
 				}
 			}
@@ -201,7 +211,7 @@ public class Compare_control {
 		}
 
 		if (!isEqual || !isEqual2) {
-			// �꽔�뼱以щ뜕嫄� 吏��썙以��떎
+			// 占쎄퐫占쎈선餓Ρ됰쐲椰꾬옙 筌욑옙占쎌뜖餓ο옙占쎈뼄
 			remove(first, offset + 3);
 			remove(second, offset2 + 3);
 		}
@@ -232,7 +242,7 @@ public class Compare_control {
 	private int MAX(int upper, int left) {
 		return upper > left ? upper : left;
 	}
-	
+
 	private int MIN(int upper, int left) {
 		return upper < left ? upper : left;
 	}
@@ -277,21 +287,21 @@ public class Compare_control {
 
 		StyledDocument doc = textP.getStyledDocument();
 		Style style = textP.addStyle("String", null);
-		StyleConstants.setForeground(style, foreG);// 湲��옄�깋
-		StyleConstants.setBackground(style, backG);// 諛곌꼍�깋
-		// �꽔�뒗踰뺢퀬誘�...
+		StyleConstants.setForeground(style, foreG);// 疫뀐옙占쎌쁽占쎄퉳
+		StyleConstants.setBackground(style, backG);// 獄쏄퀗瑗랃옙源�
+		// 占쎄퐫占쎈뮉甕곕벚�ц첋占�...
 		doc.insertString(doc.getLength(), line + "\n", style);
 
 		// doc.setParagraphAttributes(arg0, line.length(), style, true);
 	}
 
-	// �븳 �씪�씤�븞�뿉�꽌 �떎瑜� 遺�遺� �엳�쓣�븣 �떎瑜몃�遺� �깋移�
+	// 占쎈립 占쎌뵬占쎌뵥占쎈툧占쎈퓠占쎄퐣 占쎈뼄�몴占� �겫占썽겫占� 占쎌뿳占쎌뱽占쎈르 占쎈뼄�몴紐껓옙�겫占� 占쎄퉳燁삼옙
 	private void inLineDiff(String l, String l2, JTextPane tP, JTextPane tP2) throws Exception {
 		String[] part = l.split("\\s");
 		String[] part2 = l2.split("\\s");
 		// ArrayList<String> p = new ArrayList<String>();
 		// ArrayList<String> p2 = new ArrayList<String>();
-		// arraylist�뿉 �꽔�뼱二쇨린
+		// arraylist占쎈퓠 占쎄퐫占쎈선雅뚯눊由�
 		int j = 0;
 		for (j = 0; j < part.length - 1; j++) {
 			part[j] = part[j].toString() + " ";
@@ -299,7 +309,7 @@ public class Compare_control {
 		for (j = 0; j < part2.length; j++) {
 			part2[j] = part2[j].toString() + " ";
 		}
-		int min_array= MIN(part.length, part2.length);
+		int min_array = MIN(part.length, part2.length);
 		if (part.length > part2.length) {
 			for (int n = 0; n < min_array; n++) {
 				if (LCS(part[n], part2[n]) != MAX(part[n].length(), part2[n].length())) {
@@ -345,28 +355,42 @@ public class Compare_control {
 		Style style = textP.addStyle("String", null);
 		StyleConstants.setForeground(style, foreG);
 		StyleConstants.setBackground(style, backG);
-		
+
 		doc.insertString(doc.getLength(), line, style);
 	}
-	
-	/*public void addSpace(int space, int lineN, int has, int num, String l, String l2, JTextPane tP, JTextPane tP2, Scanner s) throws Exception {
-		space = has - num;
-		for (int i = 0; i < space; i++) {
-			if (l.length() != 0) {
-				insert(tP, Color.BLACK, Color.YELLOW, l);
-			} else {
-				insert(tP, Color.BLACK, Color.YELLOW, whenNull);
-			}
-			insert(tP2, Color.BLACK, Color.GRAY, whenNull);
-			if (s.hasNextLine()) {
-				l = s.nextLine();
-				num++;
+
+	private boolean line_check(String l, String l2) {
+		
+		char[] k = null;
+		char[] k2 = null;
+		int j = 0;
+		int j2 = 0;
+		k = l.toCharArray();
+		k2 = l2.toCharArray();
+		
+		temp.clear();
+		temp2.clear();
+		
+		for (int i =0 ; i < l.length(); i++) {
+			if (k[i] != ' ') {
+				
+				temp.add(k[i]);
+				j++;
 			}
 		}
-		lineN += space;
-		insert(tP, Color.BLACK, Color.WHITE, l);
-		insert(tP2, Color.BLACK, Color.WHITE, l2);
-	}*/
-	
+		
+		for (int i = 0; i < l2.length(); i++) {
+			if (k2[i] != ' ') {
+				temp2.add(k2[i]);
+				j2++;
+			}
+		}
+		
+		if (LCS(temp.toString(), temp2.toString()) == MAX(3*j,3*j2)) {
+			return true;
+		}
+		return false;
+
+	}
 
 }
