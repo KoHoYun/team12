@@ -54,12 +54,6 @@ public class Merge_control {
 				break;
 		}//colorset저장 size구하면 라인수 알 수 있음
 		
-		
-		
-		Element text2 = root2.getElement(lineNum-1);
-		
-		
-		
 		int start1=text1.getStartOffset(), end1=text1.getEndOffset();
 		int start2=0, end2=0;
 		
@@ -72,18 +66,71 @@ public class Merge_control {
 		}
 		//repLine에 복사해야 하는 텍스트 저장
 		
+		//세가지 경우의 수로 나누어 작성 모두 회색/모두 노랑색/회색+노랑색
+		
+		//colorset을 뒤에서 부터 검사해서 만약 회색이면 그줄을 양쪽에서 지운다. 노랑색일땐 아래 참고하기  
+		
+		//중복되는거 개짱많음 어떻게 함수로 빼서 사용할지 생각해보기  
+		
+		
+		
+		
+		text1 = root1.getElement(lineNum-1);
+		Element text2 = root2.getElement(lineNum-1);
+		//++++++++++++++++++++++++++++모두 gray++++++++++++
+		for(int j=ColorSet.size()-1;j>=0;j--)
+		{
+			if(ColorSet.get(j) == Color.GRAY)
+			{
+				if(repLine.size()==1)
+				{
+					start2 = text2.getStartOffset();
+					end2 = text2.getEndOffset();
+				}
+				else if(repLine.size()>1)
+				{
+					start2 = text2.getStartOffset();//오른쪽꺼 시작 오프셋 구하기
+					text2 = root2.getElement(lineNum-1+repLine.size()-1);//마지막 줄lineNum-1 => lineNum에 해당하는 element구하기 element는 0시작하니까, repLine.size()-1는 마지막줄 나타내기 위해서
+					end2 = text2.getEndOffset(); //마지막 줄 엔드오프셋
+				}
+				doc2.remove(start2,end2); //doc2에서 제거 
+			
+				//doc1에서 remove
+				
+				if(repLine.size()==1)
+				{
+					start1 = text1.getStartOffset();
+					end1 = text1.getEndOffset();
+				}
+				else if(repLine.size()>1)
+				{
+					start1 = text1.getStartOffset();//오른쪽꺼 시작 오프셋 구하기
+					text1 = root1.getElement(lineNum-1+repLine.size()-1);//마지막 줄lineNum-1 => lineNum에 해당하는 element구하기 element는 0시작하니까, repLine.size()-1는 마지막줄 나타내기 위해서
+					end1 = text1.getEndOffset(); //마지막 줄 엔드오프셋
+				}
+				doc1.remove(start1, end1);	
+				
+			
+			}
+		}
+		//++++++++++++++++++++++++++++++++++++++++++++++++
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//++++++++++++++++++++모두 yellow or orange++++++++++++++++++++++++++++
 		boolean gray = false;
 		for(int j=0;j<ColorSet.size();j++)
 		{
 			if(ColorSet.get(j)==Color.GRAY)
 				gray = true;
 		}
-		
-		
-		
-		
-		
-		
 		
 		///아래의 코드는 노랑색만 가능 (gray == false일때)
 		if(repLine.size()==1)
@@ -106,7 +153,7 @@ public class Merge_control {
 		}
 		//회색이면 회색인 오프셋 받아서 삭제하면됨
 		
-		
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 		
 		
