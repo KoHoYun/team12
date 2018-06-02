@@ -29,7 +29,6 @@ public class View extends JFrame {
     private ImageIcon leftic = new ImageIcon("icon\\left-arrow.png");
 
 	public JFileChooser filechoose = new JFileChooser();
-	//00
 	public JButton loadBtn1 = new JButton("LOAD", loadicon);
 	public JButton editBtn1 = new JButton("EDIT", editicon);
 	public JButton saveBtn1 = new JButton("SAVE", saveicon);
