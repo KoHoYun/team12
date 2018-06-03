@@ -215,6 +215,10 @@ public class Merge_control {
 	}
 	public Color getColor(Element elem) {//++++++++++++찌효 만들어주세영
 		Color colr = Color.YELLOW;
+		
+//		elem.getAttributes();
+
+		
 		if((colr== Color.YELLOW) || (colr== Color.ORANGE) ||(colr== Color.GRAY))
 		{
 			return colr;
