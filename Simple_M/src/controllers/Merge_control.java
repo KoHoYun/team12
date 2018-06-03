@@ -50,7 +50,7 @@ public class Merge_control {
 
 			Color Colr = StyleConstants.getBackground(tempColr.getAttributes());
 
-			if((Colr == Color.YELLOW) ||(Colr == Color.GRAY)) {
+			if((Colr == Color.YELLOW) ||(Colr == Color.GRAY) ||(Colr == Color.ORANGE)) {
 			ColorSet.add(Colr);
 			}
 			else {
@@ -75,7 +75,7 @@ public class Merge_control {
 			int end2 = temp2.getEndOffset();
 			
 			
-			if(ColorSet.get(j) == Color.yellow) {
+			if((ColorSet.get(j) == Color.yellow)||(ColorSet.get(j) == Color.orange)) {
 				
 				repLine = doc1.getText(start1, end1-start1);
 				doc2.remove(start2, end2-start2);
@@ -120,7 +120,7 @@ public class Merge_control {
 
 			Color Colr = StyleConstants.getBackground(tempColr.getAttributes());
 
-			if((Colr == Color.YELLOW) ||(Colr == Color.GRAY)) {
+			if((Colr == Color.YELLOW) ||(Colr == Color.GRAY)||(Colr == Color.ORANGE)) {
 			ColorSet.add(Colr);
 			}
 			else {
@@ -145,7 +145,7 @@ public class Merge_control {
 			int end2 = temp2.getEndOffset();
 			
 			
-			if(ColorSet.get(j) == Color.yellow) {
+			if((ColorSet.get(j) == Color.yellow)||(ColorSet.get(j) == Color.orange)) {
 				
 				repLine = doc2.getText(start2, end2-start2);
 				doc1.remove(start1, end1-start1);
