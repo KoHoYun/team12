@@ -31,6 +31,7 @@ public class MainControl {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				new Load_control(getFileChoose(), getTextLeft());
+				theView.compareBtn.setEnabled(true);
 			}
 		});
 		this.theView.loadBtn2.addActionListener(new ActionListener() {
@@ -38,6 +39,7 @@ public class MainControl {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				new Load_control(getFileChoose(), getTextRight());
+				theView.compareBtn.setEnabled(true);
 			}
 		});
 
@@ -54,6 +56,7 @@ public class MainControl {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				new Edit_control(getTextRight(), theView.loadBtn2, true, false);
+				theView.compareBtn.setEnabled(true);
 			}
 		});
 
@@ -62,6 +65,7 @@ public class MainControl {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Save_control(theView.saveBtn1, getTextLeft(),e);
+				theView.compareBtn.setEnabled(true);
 			}
 		});
 		
@@ -71,6 +75,7 @@ public class MainControl {
 			public void actionPerformed(ActionEvent e) {
 				
 				new Save_control(theView.saveBtn2, getTextRight(),e);
+				theView.compareBtn.setEnabled(true);
 			}
 		});
 		
@@ -102,7 +107,13 @@ public class MainControl {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								// System.out.println("left interpos: "+interpos);
-								new Merge_control(theView.leftcode, theView.rightcode, interpos, 0);
+								try {
+									new Merge_control(theView.leftcode, theView.rightcode, interpos, 0);
+								} catch (BadLocationException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								theView.compareBtn.setEnabled(true);
 							}
 
 							
@@ -113,9 +124,15 @@ public class MainControl {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								// System.out.println("right interpos: "+interpos);
-								new Merge_control(theView.leftcode, theView.rightcode, interpos, 1);
-								
+								try {
+									new Merge_control(theView.leftcode, theView.rightcode, interpos, 1);
+								} catch (BadLocationException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								theView.compareBtn.setEnabled(true);
 							}
+							
 
 						});
 						
@@ -126,7 +143,7 @@ public class MainControl {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					// theView.compareBtn.setEnabled(false);
+					theView.compareBtn.setEnabled(false);
 				}
 			});
 	}
