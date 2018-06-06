@@ -123,30 +123,7 @@ public class View extends JFrame {
     Frame.add(scroll1);
     Frame.add(CMbtns);
     Frame.add(scroll2);
-
-    
-    mergeBtn1.addActionListener(new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-    	
-    });
-    
-    
-    mergeBtn2.addActionListener(new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-    	
-    });
-    
-    
+       
     view.add(main);
     view.setVisible(true);
 	}
