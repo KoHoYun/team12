@@ -10,8 +10,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.Utilities;
 
-import org.junit.Test;
-
 
 public class Merge_control {
 	
@@ -93,7 +91,7 @@ public class Merge_control {
         }     
 	}
 	
-	@Test
+
 	private void MergetoRight() throws BadLocationException {
 		System.out.println("-----Run Merge to Right-----");
 		StyledDocument doc1 = first.getStyledDocument();//get StyledDocument to get color
