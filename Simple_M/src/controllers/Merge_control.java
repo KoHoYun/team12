@@ -10,6 +10,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.Utilities;
 
+import org.junit.Test;
+
 
 public class Merge_control {
 	
@@ -24,10 +26,18 @@ public class Merge_control {
 	/*This is a constructor for merging text*/
 	public Merge_control(JTextPane first, JTextPane second,int pos,int i) throws BadLocationException {
 		
+		RightTextTest(second);
+		LeftTextTest(first);
 		setLeftText(first);
 		setRightText(second);
+		RightTextTest(second);
+		LeftTextTest(first);
 		setLineNum(pos);
-
+		
+		
+		
+		RightTextTest(second);
+		
 		System.out.println("                                     ");	
 		
 		System.out.println("Successfully Construct Merge_control");	
@@ -39,8 +49,18 @@ public class Merge_control {
 			MergetoRight();
 		
 		
+		
 		 
 	}	
+	//+++++++++++++++++++++++++Unit test+++++++++++++++++++++++
+	public void LeftTextTest(JTextPane first) {
+		assert first == getLeftText() : "invalid left text";
+	}
+	public void RightTextTest(JTextPane second) {
+		assert second == getRightText() : "invalid right text";
+	}
+	
+
 	
 	public void setLeftText(JTextPane first) {
 		this.first = first;
@@ -72,6 +92,8 @@ public class Merge_control {
             e.printStackTrace();
         }     
 	}
+	
+	@Test
 	private void MergetoRight() throws BadLocationException {
 		System.out.println("-----Run Merge to Right-----");
 		StyledDocument doc1 = first.getStyledDocument();//get StyledDocument to get color
@@ -99,6 +121,7 @@ public class Merge_control {
 				break;
 			}
 		}
+		
 		
 
 		/*Check the ColorSet*/
