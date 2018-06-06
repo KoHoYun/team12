@@ -21,8 +21,10 @@ public class SaveFile {
 					FileWriter fw = new FileWriter(f+".txt");
 					fw.write(str);
 					fw.close();
+					System.out.println("file이 잘 저장되었습니다");
 
 				} catch (Exception ex) {
+					System.out.println("파일 저장에 오류가 있습니다");	
 				}
 			}
 
