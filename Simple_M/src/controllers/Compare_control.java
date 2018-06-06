@@ -22,7 +22,7 @@ public class Compare_control {
 	private String line = null;
 	private String line2 = null;
 	// replace empty line to space characters when it has to be colored
-	private String whenNull = "                                 ";
+	private String whenNull = "                                                 ";
 	private int spaceNum;
 	private int leftHas;
 	private int rightHas;
