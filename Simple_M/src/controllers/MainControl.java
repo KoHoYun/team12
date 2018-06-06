@@ -31,7 +31,7 @@ public class MainControl {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				new Load_control(getFileChoose(), getTextLeft());
-				theView.editBtn1.setEnabled(false);
+				theView.leftcode.setEditable(false);
 				theView.compareBtn.setEnabled(true);
 			}
 		});
@@ -40,7 +40,7 @@ public class MainControl {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				new Load_control(getFileChoose(), getTextRight());
-				theView.editBtn2.setEnabled(false);
+				theView.rightcode.setEditable(false);
 				theView.compareBtn.setEnabled(true);
 			}
 		});
