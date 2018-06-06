@@ -68,8 +68,8 @@ public class Merge_control {
 			{
 				break;
 			}
-			Element temp1 = root1.getElement(lineNum-1+j);
-			Element temp2 = root2.getElement(lineNum-1+j);
+			Element temp1 = root1.getElement(lineNum-1+j);//Get a element corresponding lineNum-1+j frome left textpane
+			Element temp2 = root2.getElement(lineNum-1+j);//Get a element from right textpane
 			
 			int start1 = temp1.getStartOffset();
 			int end1 = temp1.getEndOffset();
@@ -77,13 +77,13 @@ public class Merge_control {
 			int end2 = temp2.getEndOffset();
 			
 			
-			if((ColorSet.get(j) == Color.yellow)||(ColorSet.get(j) == Color.orange)) {
+			if((ColorSet.get(j) == Color.yellow)||(ColorSet.get(j) == Color.orange)) {//if the line color is yellow or orange
 				
-				repLine = doc1.getText(start1, end1-start1);
-				doc2.remove(start2, end2-start2);
-				doc2.insertString(start2, repLine, null);
+				repLine = doc1.getText(start1, end1-start1);//get a colored line from doc1(left textpane)
+				doc2.remove(start2, end2-start2);//remove the line at the doc2(right textpane)
+				doc2.insertString(start2, repLine, null);//Insert a string at the place where the line is to be deleted.
 				
-	
+				//after replacing a line, set color again.
 				Style style = first.addStyle("String", null);
 				StyleConstants.setForeground(style, Color.black);
 				StyleConstants.setBackground(style, Color.white);
@@ -91,8 +91,8 @@ public class Merge_control {
            }
 			
 			
-			else if(ColorSet.get(j) == Color.GRAY) {
-				doc1.remove(start1, end1-start1);;
+			else if(ColorSet.get(j) == Color.GRAY) {//if the line color is gray,delete a line at doc1,doc2
+				doc1.remove(start1, end1-start1);
 				doc2.remove(start2, end2-start2);
 			}
 			else {
@@ -103,6 +103,7 @@ public class Merge_control {
 		 
 		}
 	
+	/*Same as Merge to Right */
 	public void MergetoLeft(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
 		System.out.println("Enter the MergetoLeft*");
 		StyledDocument doc1 = first.getStyledDocument();
@@ -117,7 +118,7 @@ public class Merge_control {
 		
 		for(int i=0;;i++) {
 			
-			Element temp = root2.getElement(lineNum-1+i);//다음 엘리먼트 
+			Element temp = root2.getElement(lineNum-1+i);
 			Element tempColr = doc2.getCharacterElement(temp.getStartOffset());
 
 			Color Colr = StyleConstants.getBackground(tempColr.getAttributes());
@@ -172,7 +173,7 @@ public class Merge_control {
 		}
 		 
 		}
-	
+	/*this function return line Number from pos(where user clicked)*/
 	public int getLineCount(JTextPane textPane, int pos)
 	{
 		int lineCount = (pos==0) ? 1 : 0;
