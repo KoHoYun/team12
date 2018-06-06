@@ -11,6 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Load_control {
 
+	/*load the file*/
 	public Load_control(JFileChooser filechoose, JTextPane code) {
 		filechoose.addChoosableFileFilter(new FileNameExtensionFilter("Text file", "txt"));
 		filechoose.setAcceptAllFileFilterUsed(false);
