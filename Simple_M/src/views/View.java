@@ -139,7 +139,7 @@ public class View extends JFrame {
 		return this.leftcode;
 	}
 	
-	private void setTextRight(JTextPane leftcode)
+	private void setTextRight(JTextPane rightcode)
 	{
 		this.rightcode = rightcode;
 	}
