@@ -14,11 +14,11 @@ public class SaveFile {
 			JFileChooser sf = new JFileChooser();
 			if (sf.showSaveDialog(button) == sf.APPROVE_OPTION) {
 				try {
-					String str = text.getText().trim();
+					String str = text.getText();
 					if (str.length() < 1)
 						return;
 					File f = sf.getSelectedFile();
-					FileWriter fw = new FileWriter(f);
+					FileWriter fw = new FileWriter(f+".txt");
 					fw.write(str);
 					fw.close();
 
