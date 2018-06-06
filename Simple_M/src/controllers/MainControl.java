@@ -91,7 +91,15 @@ public class MainControl {
                   // mergeText                
                   
                   
-                  
+                  theView.getTextRight().addMouseListener(new MouseAdapter() {
+                      
+                      @Override
+                      public void mousePressed(MouseEvent e) {
+                         interpos = theView.getTextRight().getCaretPosition();
+                         // System.out.println("* interpos: "+interpos);
+                      }
+                      
+                   });
                   // get clicked line number from leftcode
                   theView.getTextLeft().addMouseListener(new MouseAdapter() {
                      
