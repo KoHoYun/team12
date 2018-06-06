@@ -14,12 +14,13 @@ import javax.swing.text.Utilities;
 public class Merge_control {
 	public Merge_control() {
 	}
+	/*This is a constructor for merging text*/
 	public Merge_control(JTextPane first, JTextPane second,int pos,int i) throws BadLocationException {
 		
-		int lineNum = getLineCount(first,pos);	
+		int lineNum = getLineCount(first,pos);//get line number
 		System.out.println("Successfully Construct Merge_control*");	
 		
-		
+		/*call a function depend on 'i' (i==0 means user selected Merge to left)*/
 		if(i == 0)
 			MergetoLeft(first,second,lineNum);
 		else
@@ -33,23 +34,24 @@ public class Merge_control {
 	
 	public void MergetoRight(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
 		System.out.println("Enter the MergetoRIGHT*");
-		StyledDocument doc1 = first.getStyledDocument();
+		StyledDocument doc1 = first.getStyledDocument();//get StyledDocument to get color
 		StyledDocument doc2 = second.getStyledDocument();		
-		Element root1 = doc1.getDefaultRootElement();
+		Element root1 = doc1.getDefaultRootElement();//root1 stores element line by line
 		Element root2 = doc2.getDefaultRootElement();
 		String repLine = new String();
 	
 		
-		ArrayList<Color> ColorSet = new ArrayList<Color>();
+		ArrayList<Color> ColorSet = new ArrayList<Color>();//ColorSet have colors
 		
 		
 		for(int i=0;;i++) {
 			
-			Element temp = root1.getElement(lineNum-1+i);//다음 엘리먼트 
-			Element tempColr = doc1.getCharacterElement(temp.getStartOffset());
+			Element temp = root1.getElement(lineNum-1+i);//temp stores the element corresponding to the line number-1+i.
+			Element tempColr = doc1.getCharacterElement(temp.getStartOffset());//Stores the first letter of the element.
 
-			Color Colr = StyleConstants.getBackground(tempColr.getAttributes());
+			Color Colr = StyleConstants.getBackground(tempColr.getAttributes());//Stores the color in the first letter of the element.
 
+			/*Yellow means different line, Orange means different section in the different line, Gray is added line with blank*/
 			if((Colr == Color.YELLOW) ||(Colr == Color.GRAY) ||(Colr == Color.ORANGE)) {
 			ColorSet.add(Colr);
 			}
@@ -59,10 +61,10 @@ public class Merge_control {
 		}
 		
 
-		
+		/*Check the ColorSet*/
 		for(int j=ColorSet.size()-1;j>=0;j--)
 		{
-			if(ColorSet.size() ==0)
+			if(ColorSet.size() ==0)//There
 			{
 				break;
 			}
