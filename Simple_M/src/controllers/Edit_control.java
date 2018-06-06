@@ -8,11 +8,10 @@ import javax.swing.JTextPane;
 
 public class Edit_control {
 	
-	 /* edit button을 누르면 textpane이 수정가능해지고, load button은 누를 수 없어서 text file을 불러올 수 없다 */
+	 /* edit button�쓣 �늻瑜대㈃ textpane�씠 �닔�젙媛��뒫�빐吏�怨�, load button�� �늻瑜� �닔 �뾾�뼱�꽌 text file�쓣 遺덈윭�삱 �닔 �뾾�떎 */
 	
-	public Edit_control(JTextPane a, JButton aButton, boolean editable, boolean push) {
+	public Edit_control(JTextPane a, boolean editable) {
 		a.setEditable(editable);
-		aButton.setEnabled(push);
 	}
 
 }
