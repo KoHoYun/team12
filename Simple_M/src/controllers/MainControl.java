@@ -47,7 +47,7 @@ public class MainControl {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				new Edit_control(getTextLeft(), theView.loadBtn1, true, false);
+				new Edit_control(getTextLeft(), true);
 			}
 		});
 
@@ -55,7 +55,7 @@ public class MainControl {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				new Edit_control(getTextRight(), theView.loadBtn2, true, false);
+				new Edit_control(getTextRight(), true);
 				theView.compareBtn.setEnabled(true);
 			}
 		});
@@ -100,8 +100,7 @@ public class MainControl {
 							
 						});
 							
-						
-						
+		
 						// 1. right to left
 						theView.mergeBtn1.addActionListener(new ActionListener() {
 							@Override
@@ -131,8 +130,7 @@ public class MainControl {
 									e1.printStackTrace();
 								}
 								theView.compareBtn.setEnabled(true);
-							}
-							
+							}				
 
 						});
 						
@@ -160,5 +158,4 @@ public class MainControl {
 		return theView.rightcode;
 	}
 	
-
 }
