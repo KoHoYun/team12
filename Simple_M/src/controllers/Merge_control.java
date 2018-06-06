@@ -9,7 +9,8 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.Utilities;
-
+/*Merge_control execute Merge two files. If a user click a line, Merge to ~ check the line color and the next line color.
+if the color is white, stop checking the line. and merge strings based on color */
 
 public class Merge_control {
 	public Merge_control() {
