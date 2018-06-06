@@ -1,424 +1,238 @@
 package controllers;
 
-import models.*;
-import views.*;
-
 import java.awt.Color;
-import java.io.*;
-import java.util.*;
-
+import java.util.ArrayList;
 import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.Utilities;
 
-public class Compare_control {
+import org.junit.Test;
 
-	private int[][] LCStable;
 
-	private int offset;
-	private int offset2;
+public class Merge_control {
+	
+	private int pos;
+	private int selectMerge;
+	private JTextPane first;
+	private JTextPane second;
+	private int lineNum;
+	
+	public Merge_control() {
+	}
+	/*This is a constructor for merging text*/
+	public Merge_control(JTextPane first, JTextPane second,int pos,int i) throws BadLocationException {
+		
+		
+		LeftTextTest(first);
+		setLeftText(first);
+		setRightText(second);
+		setLineNum(pos);
+		
+		
+		
+		RightTextTest(second);
+		
+		System.out.println("                                     ");	
+		
+		System.out.println("Successfully Construct Merge_control");	
+		
+		/*call a function depend on 'i' (i==0 means user selected Merge to left)*/
+		if(i == 0)
+			MergetoLeft();
+		else
+			MergetoRight();
+		
+		
+		
+		 
+	}	
+	//+++++++++++++++++++++++++Unit test+++++++++++++++++++++++
+	public void LeftTextTest(JTextPane first) {
+		assert first == getLeftText() : "invalid left text";
+	}
+	public void RightTextTest(JTextPane second) {
+		assert second == getRightText() : "invalid right text";
+	}
+	
 
-	private String line = null;
-	private String line2 = null;
-	// replace empty line to space characters when it has to be colored
-	private String whenNull = "                                                 ";
-	private int spaceNum;
-	private int leftHas;
-	private int rightHas;
-	private int lineNum = 0; // line number of styledocument
-	private int left_num = 0; // line number of left file
-	private int right_num = 0; // line number of right file
-	private boolean isEqual = false;
-	private boolean isEqual2 = true;//these two variables are used to check if two files are identical
-	private boolean forRemove = false;
-	private ArrayList<Character> temp = new ArrayList<Character>();
-	private ArrayList<Character> temp2 = new ArrayList<Character>();
+	
+	public void setLeftText(JTextPane first) {
+		this.first = first;
+	}
+	public void setRightText(JTextPane second) {
+		this.second = second;
+	}
+	public JTextPane getLeftText()
+	{
+		return this.first;
+	}
+	public JTextPane getRightText()
+	{
+		return this.second;
+	}
 
-	public Compare_control(JTextPane first, JTextPane second) throws IOException, Exception {
+	/*this function return line Number from pos(where user clicked)*/
+	private void setLineNum(int pos)
+	{
+		int lineCount = (pos==0) ? 1 : 0;
+        try {
+            int offs=pos;
+            while( offs>0) {
+                offs=Utilities.getRowStart(first,offs)-1;
+                lineCount++;
+            }
+            lineNum = lineCount;
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }     
+	}
+	
+	@Test
+	private void MergetoRight() throws BadLocationException {
+		System.out.println("-----Run Merge to Right-----");
+		StyledDocument doc1 = first.getStyledDocument();//get StyledDocument to get color
+		StyledDocument doc2 = second.getStyledDocument();		
+		Element root1 = doc1.getDefaultRootElement();//root1 stores element line by line
+		Element root2 = doc2.getDefaultRootElement();
+		String repLine = new String();
+	
+		
+		ArrayList<Color> ColorSet = new ArrayList<Color>();//ColorSet have colors
+		
+		
+		for(int i=0;;i++) {
+			
+			Element temp = root1.getElement(lineNum-1+i);//temp stores the element corresponding to the line number-1+i.
+			Element tempColr = doc1.getCharacterElement(temp.getStartOffset());//Stores the first letter of the element.
 
-		StringReader read = new StringReader(first.getText());
-		StringReader read2 = new StringReader(second.getText());
+			Color Colr = StyleConstants.getBackground(tempColr.getAttributes());//Stores the color in the first letter of the element.
 
-		BufferedReader reader = new BufferedReader(read);
-		BufferedReader reader2 = new BufferedReader(read2);
-
-		Scanner s = new Scanner(reader);
-		Scanner s2 = new Scanner(reader2);
-		int i;
-
-		offset = getOffset(first);
-		offset2 = getOffset(second);
-
-		/* If both files are empty. */
-		if (!s.hasNextLine() && !s2.hasNextLine()) {
-			isEqual = true;
+			/*Yellow means different line, Orange means different section in the different line, Gray is added line with blank*/
+			if((Colr == Color.YELLOW) ||(Colr == Color.GRAY) ||(Colr == Color.ORANGE)) {
+			ColorSet.add(Colr);
+			}
+			else {
+				break;
+			}
 		}
 		
-		/* executing when both files have next line to read. */
-		while (s.hasNextLine() && s2.hasNextLine()) {
-			forRemove = true;
-			line = s.nextLine();
-			line2 = s2.nextLine();
+		
 
-			lineNum++;
-			right_num++;
-			left_num++;
-			if (lineNum == 1) {
-				insert(first, Color.black, Color.black, "\n%");
-				insert(second, Color.black, Color.black, "\n%");
-			}
-			/* both string are different */
-			if (LCS(line, line2) != MAX(line.length(), line2.length())) {
-				isEqual2 = false;
-				if (line_check(line, line2)) {
-					insert(first, Color.red, Color.YELLOW, line);
-					insert(second, Color.red, Color.YELLOW, line2);
-				} else {
-					if (line.length() != 0 && line2.length() != 0) {
-						rightHas = hasEqual(right_num, line, second);
-						leftHas = hasEqual(left_num, line2, first);
-
-						if (rightHas == right_num && leftHas == left_num) {
-							inLineDiff(line, line2, first, second);
-							insert(first, Color.black, Color.black, "");
-							insert(second, Color.black, Color.black, "");
-
-						} else {
-							if (rightHas == right_num && leftHas != left_num) {
-								spaceNum = leftHas - left_num;
-								for (i = 0; i < spaceNum; i++) {
-									if (line.length() != 0) {
-										insert(first, Color.red, Color.YELLOW, line);
-									} else {
-										insert(first, Color.red, Color.YELLOW, whenNull);
-									}
-									insert(second, Color.red, Color.GRAY, whenNull);
-									if (s.hasNextLine()) {
-										line = s.nextLine();
-										left_num++;
-									}
-								}
-								lineNum += spaceNum;
-								insert(first, Color.BLACK, Color.WHITE, line);
-								insert(second, Color.BLACK, Color.WHITE, line2);
-
-							}
-
-							else if (rightHas != right_num && leftHas == left_num) {
-								spaceNum = rightHas - right_num;
-								for (i = 0; i < spaceNum; i++) {
-									if (line2.length() != 0) {
-										insert(second, Color.red, Color.YELLOW, line2);
-									} else {
-										insert(second, Color.red, Color.YELLOW, whenNull);
-									}
-									insert(first, Color.red, Color.GRAY, whenNull);
-									if (s2.hasNextLine()) {
-										line2 = s2.nextLine();
-										right_num++;
-									}
-								}
-								lineNum += spaceNum;
-								insert(first, Color.BLACK, Color.WHITE, line);
-								insert(second, Color.BLACK, Color.WHITE, line2);
-
-							} else {
-								spaceNum = leftHas - left_num;
-								for (i = 0; i < spaceNum; i++) {
-									if (line.length() != 0) {
-										insert(first, Color.red, Color.YELLOW, line);
-									} else {
-										insert(first, Color.red, Color.YELLOW, whenNull);
-									}
-									insert(second, Color.red, Color.GRAY, whenNull);
-									if (s.hasNextLine()) {
-										line = s.nextLine();
-										left_num++;
-									}
-								}
-								lineNum += spaceNum;
-								insert(first, Color.BLACK, Color.WHITE, line);
-								insert(second, Color.BLACK, Color.WHITE, line2);
-							}
-						}
-
-					}
-
-					else if (line.length() == 0 && line2.length() != 0) {// if left line is empty and right is not.
-						leftHas = hasEqual(left_num, line2, first);
-						if (leftHas == left_num) {// if there isn't same line with right line in left file, rewrite that
-													// two lines with coloring.
-							insert(first, Color.red, Color.YELLOW, whenNull);
-							insert(second, Color.red, Color.YELLOW, line2);
-						} else {// if there is same line with right line in left file, add empty line with
-								// yellow coloring in left file.
-							spaceNum = leftHas - left_num;
-							for (i = 0; i < spaceNum; i++) {
-								if (line.length() != 0) {
-									insert(first, Color.red, Color.YELLOW, line);
-								} else {
-									insert(first, Color.red, Color.YELLOW, whenNull);
-								}
-
-								insert(second, Color.red, Color.GRAY, whenNull);
-								if (s.hasNextLine()) {
-									line = s.nextLine();
-									left_num++;
-								}
-							}
-							lineNum += spaceNum;
-							insert(first, Color.BLACK, Color.WHITE, line);
-							insert(second, Color.BLACK, Color.WHITE, line2);
-
-						}
-					} else {// if right line is empty and left is not.
-						rightHas = hasEqual(right_num, line, second);
-						if (rightHas == right_num) {// if there isn't same line with left line in riht file, rewrite
-													// that two lines with coloring.
-							insert(first, Color.red, Color.YELLOW, line);
-							insert(second, Color.red, Color.YELLOW, whenNull);
-						} else {// if there is same line with left line in right file, add empty line with
-								// yellow coloring in right file.
-							spaceNum = rightHas - right_num;
-							for (i = 0; i < spaceNum; i++) {
-								if (line2.length() != 0) {
-									insert(second, Color.red, Color.YELLOW, line);
-								} else {
-									insert(second, Color.red, Color.YELLOW, whenNull);
-								}
-
-								insert(first, Color.red, Color.GRAY, whenNull);
-								if (s2.hasNextLine()) {
-									line2 = s2.nextLine();
-									right_num++;
-								}
-							}
-							lineNum += spaceNum;
-							insert(first, Color.BLACK, Color.WHITE, line);
-							insert(second, Color.BLACK, Color.WHITE, line2);
-						}
-					}
-				}
-			}
-
-			else {
-				insert(first, Color.BLACK, Color.WHITE, line);
-				insert(second, Color.BLACK, Color.WHITE, line2);
-			}
-
-		}
-
-		/*if one file is longer than the other one, add rest part of the file with coloring at the end.*/
-		while(s.hasNextLine()){
-			line = s.nextLine();
-			insert(first, Color.red, Color.YELLOW, line);
-			insert(second, Color.red, Color.GRAY, whenNull);
-			isEqual2 =false;
-		}
-		while(s2.hasNextLine()){
-			line2 = s2.nextLine();
-			insert(second, Color.red, Color.YELLOW, line2);
-			insert(first, Color.red, Color.GRAY, whenNull);
-			isEqual2 =false;
-		}
-
-		if(forRemove)
+		/*Check the ColorSet*/
+		for(int j=ColorSet.size()-1;j>=0;j--)
 		{
-			remove(first, offset + 3);
-			remove(second, offset2 + 3);
-		}
-		else {
-			remove(first, offset );
-			remove(second, offset2);
-		}
-		/*if two files are identical*/
-		if (isEqual2) {
-			new Identical_control(true);
-		}
-
-		reader.close();
-		reader2.close();
-	}
-
-	/*counts number of identical characters in two string.*/
-	private int LCS(String a, String b) {
-		LCStable = new int[a.length() + 1][b.length() + 1];
-		int i, j;
-
-		for (i = 1; i < LCStable.length; i++) {
-			for (j = 1; j < LCStable[i].length; j++) {
-				if (a.charAt(i - 1) == b.charAt(j - 1)) {
-					LCStable[i][j] = LCStable[i - 1][j - 1] + 1;
-				} else {
-					LCStable[i][j] = MAX(LCStable[i - 1][j], LCStable[i][j - 1]);
-				}
+			if(ColorSet.size() ==0)//There
+			{
+				break;
 			}
+			Element temp1 = root1.getElement(lineNum-1+j);//Get a element corresponding lineNum-1+j frome left textpane
+			Element temp2 = root2.getElement(lineNum-1+j);//Get a element from right textpane
+			
+			int start1 = temp1.getStartOffset();
+			int end1 = temp1.getEndOffset();
+			int start2 = temp2.getStartOffset();
+			int end2 = temp2.getEndOffset();
+			
+			
+			if((ColorSet.get(j) == Color.yellow)||(ColorSet.get(j) == Color.orange)) {//if the line color is yellow or orange
+				
+				repLine = doc1.getText(start1, end1-start1);//get a colored line from doc1(left textpane)
+				doc2.remove(start2, end2-start2);//remove the line at the doc2(right textpane)
+				doc2.insertString(start2, repLine, null);//Insert a string at the place where the line is to be deleted.
+				
+				//after replacing a line, set color again.
+				Style style = first.addStyle("String", null);
+				StyleConstants.setForeground(style, Color.black);
+				StyleConstants.setBackground(style, Color.white);
+				doc1.setCharacterAttributes(start1, end1-start1, style, true);
+           }
+			
+			
+			else if(ColorSet.get(j) == Color.GRAY) {//if the line color is gray,delete a line at doc1,doc2
+				doc1.remove(start1, end1-start1);
+				doc2.remove(start2, end2-start2);
+			}
+			else {
+				break;
+			}
+				
 		}
-		return LCStable[a.length()][b.length()];
-	}
-
-	private int MAX(int upper, int left) {
-		return upper > left ? upper : left;
-	}
-
-	private int MIN(int upper, int left) {
-		return upper < left ? upper : left;
-	}
+		 
+		}
 	
-
-	/*
-	 * find line of same content from the other file, if there isn't, return
-	 * original line number.
-	 */
-	private int hasEqual(int l, String s, JTextPane j) throws IOException {
-
-		StringReader read = new StringReader(j.getText());
-		BufferedReader reader = new BufferedReader(read);
-		Scanner r = new Scanner(reader);
-		int no = l;
-		for (int i = 0; i < l; i++) {
-			r.nextLine();
-		}
-		String lineTemp;
-		while (r.hasNextLine()) {
-			lineTemp = r.nextLine();
-			if (lineTemp.equals("%")) {
-				return no;
-			} else {
-				l++;
-			}
-
-			if (LCS(lineTemp, s) == MAX(s.length(), lineTemp.length())) {
-				return l;
-			}
-		}
-		return no;
-
-	}
-
-	/*returns the length of styled document*/
-	private int getOffset(JTextPane textP) {
-		StyledDocument doc = textP.getStyledDocument();
-		return doc.getLength();
-	}
-
-	/* remove the int value address of the JTextPane from the beginning */
-	private void remove(JTextPane textP, int fin) throws Exception {
-		StyledDocument doc = textP.getStyledDocument();
-		doc.remove(0, fin);
-	}
-
-	/* color a string(line) value in JTextPane */
-	private void insert(JTextPane textP, Color foreG, Color backG, String line) throws Exception {
-
-		StyledDocument doc = textP.getStyledDocument();
-		Style style = textP.addStyle("String", null);
-		StyleConstants.setForeground(style, foreG);//character color
-		StyleConstants.setBackground(style, backG);//background color of text
-		doc.insertString(doc.getLength(), line + "\n", style);
-	}
+	/*Same as Merge to Right */
+	private void MergetoLeft() throws BadLocationException {
+		System.out.println("-----Run Merge to Right-----");
+		StyledDocument doc1 = first.getStyledDocument();
+		StyledDocument doc2 = second.getStyledDocument();		
+		Element root1 = doc1.getDefaultRootElement();
+		Element root2 = doc2.getDefaultRootElement();
+		String repLine = new String();
 	
+		
+		ArrayList<Color> ColorSet = new ArrayList<Color>();
+		
+		
+		for(int i=0;;i++) {
+			
+			Element temp = root2.getElement(lineNum-1+i);
+			Element tempColr = doc2.getCharacterElement(temp.getStartOffset());
+
+			Color Colr = StyleConstants.getBackground(tempColr.getAttributes());
+
+			if((Colr == Color.YELLOW) ||(Colr == Color.GRAY)||(Colr == Color.ORANGE)) {
+			ColorSet.add(Colr);
+			}
+			else {
+				break;
+			}
+		}
+		
+		
+		
+		for(int j=ColorSet.size()-1;j>=0;j--)
+		{
+			if(ColorSet.size() ==0)
+			{
+				break;
+			}
+			Element temp1 = root1.getElement(lineNum-1+j);
+			Element temp2 = root2.getElement(lineNum-1+j);
+			
+			int start1 = temp1.getStartOffset();
+			int end1 = temp1.getEndOffset();
+			int start2 = temp2.getStartOffset();
+			int end2 = temp2.getEndOffset();
+			
+			
+			if((ColorSet.get(j) == Color.yellow)||(ColorSet.get(j) == Color.orange)) {
+				
+				repLine = doc2.getText(start2, end2-start2);
+				doc1.remove(start1, end1-start1);
+				doc1.insertString(start1, repLine, null);
+				
 	
-	/* find which part of lines are different in each line. */
-	private void inLineDiff(String l, String l2, JTextPane tP, JTextPane tP2) throws Exception {
-		String[] part = l.split("\\s");
-		String[] part2 = l2.split("\\s");
-		int j = 0;
-		for (j = 0; j < part.length - 1; j++) {
-			part[j] = part[j].toString() + " ";
+				Style style = second.addStyle("String", null);
+				StyleConstants.setForeground(style, Color.black);
+				StyleConstants.setBackground(style, Color.white);
+				doc2.setCharacterAttributes(start2, end2-start2, style, true);
+           }
+			
+			
+			else if(ColorSet.get(j) == Color.GRAY) {
+				doc1.remove(start1, end1-start1);;
+				doc2.remove(start2, end2-start2);
+			}
+			else {
+				break;
+			}
+				
 		}
-		for (j = 0; j < part2.length; j++) {
-			part2[j] = part2[j].toString() + " ";
+		 
 		}
-		int min_array = MIN(part.length, part2.length);
-		if (part.length > part2.length) {
-			for (int n = 0; n < min_array; n++) {
-				if (LCS(part[n], part2[n]) != MAX(part[n].length(), part2[n].length())) {
-					insert_word(tP, Color.red, Color.orange, part[n]);
-					insert_word(tP2, Color.red, Color.orange, part2[n]);
-				} else {
-					insert_word(tP, Color.red, Color.yellow, part[n]);
-					insert_word(tP2, Color.red, Color.yellow, part2[n]);
-				}
-			}
-			for (int n = min_array; n < part.length; n++) {
-				insert_word(tP, Color.red, Color.orange, part[n]);
-			}
-		} else if (part.length < part2.length) {
-			for (int n = 0; n < min_array; n++) {
-				if (LCS(part[n], part2[n]) != MAX(part[n].length(), part2[n].length())) {
-					insert_word(tP, Color.red, Color.orange, part[n]);
-					insert_word(tP2, Color.red, Color.orange, part2[n]);
-				} else {
-					insert_word(tP, Color.red, Color.yellow, part[n]);
-					insert_word(tP2, Color.red, Color.yellow, part2[n]);
-				}
-			}
-			for (int n = min_array; n < part2.length; n++) {
-				insert_word(tP2, Color.red, Color.orange, part2[n]);
-			}
-		} else {
-			for (int n = 0; n < min_array; n++) {
-				if (LCS(part[n], part2[n]) != MAX(part[n].length(), part2[n].length())) {
-					insert_word(tP, Color.red, Color.orange, part[n]);
-					insert_word(tP2, Color.red, Color.orange, part2[n]);
-				} else {
-					insert_word(tP, Color.red, Color.yellow, part[n]);
-					insert_word(tP2, Color.red, Color.yellow, part2[n]);
-				}
-			}
-		}
-
-	}
-
-	
-	/*color a string(word) value in JtextPane */
-	private void insert_word(JTextPane textP, Color foreG, Color backG, String line) throws Exception {
-		StyledDocument doc = textP.getStyledDocument();
-		Style style = textP.addStyle("String", null);
-		StyleConstants.setForeground(style, foreG);
-		StyleConstants.setBackground(style, backG);
-
-		doc.insertString(doc.getLength(), line, style);
-	}
-
-	/*
-	 * if there is space character in one line, check characters next to space
-	 * character are same as the characters in the other line.
-	 */
-	private boolean line_check(String l, String l2) {
-
-		char[] k = null;
-		char[] k2 = null;
-		int j = 0;
-		int j2 = 0;
-		k = l.toCharArray();
-		k2 = l2.toCharArray();
-
-		temp.clear();
-		temp2.clear();
-
-		for (int i = 0; i < l.length(); i++) {
-			if (k[i] != ' ') {
-
-				temp.add(k[i]);
-				j++;
-			}
-		}
-
-		for (int i = 0; i < l2.length(); i++) {
-			if (k2[i] != ' ') {
-				temp2.add(k2[i]);
-				j2++;
-			}
-		}
-
-		if (LCS(temp.toString(), temp2.toString()) == MAX(3 * j, 3 * j2)) {
-			return true;
-		}
-		return false;
-
-	}
 
 }
