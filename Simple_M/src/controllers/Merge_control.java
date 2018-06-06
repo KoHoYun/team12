@@ -26,8 +26,8 @@ public class Merge_control {
 	/*This is a constructor for merging text*/
 	public Merge_control(JTextPane first, JTextPane second,int pos,int i) throws BadLocationException {
 		
-		RightTextTest(second);
-		LeftTextTest(first);
+		//RightTextTest(second);
+		//LeftTextTest(first);
 		setLeftText(first);
 		setRightText(second);
 		RightTextTest(second);
