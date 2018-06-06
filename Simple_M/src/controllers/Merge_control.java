@@ -32,7 +32,7 @@ public class Merge_control {
 
 	
 	
-	public void MergetoRight(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
+	private void MergetoRight(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
 		System.out.println("Enter the MergetoRIGHT*");
 		StyledDocument doc1 = first.getStyledDocument();//get StyledDocument to get color
 		StyledDocument doc2 = second.getStyledDocument();		
@@ -104,7 +104,7 @@ public class Merge_control {
 		}
 	
 	/*Same as Merge to Right */
-	public void MergetoLeft(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
+	private void MergetoLeft(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
 		System.out.println("Enter the MergetoLeft*");
 		StyledDocument doc1 = first.getStyledDocument();
 		StyledDocument doc2 = second.getStyledDocument();		
@@ -174,7 +174,7 @@ public class Merge_control {
 		 
 		}
 	/*this function return line Number from pos(where user clicked)*/
-	public int getLineCount(JTextPane textPane, int pos)
+	private int getLineCount(JTextPane textPane, int pos)
 	{
 		int lineCount = (pos==0) ? 1 : 0;
         try {
