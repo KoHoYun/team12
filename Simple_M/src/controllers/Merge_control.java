@@ -9,32 +9,71 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.Utilities;
-/*Merge_control execute Merge two files. If a user click a line, Merge to ~ check the line color and the next line color.
-if the color is white, stop checking the line. and merge strings based on color */
+
 
 public class Merge_control {
+	
+	private int pos;
+	private int selectMerge;
+	private JTextPane first;
+	private JTextPane second;
+	private int lineNum;
+	
 	public Merge_control() {
 	}
 	/*This is a constructor for merging text*/
 	public Merge_control(JTextPane first, JTextPane second,int pos,int i) throws BadLocationException {
 		
-		int lineNum = getLineCount(first,pos);//get line number
-		System.out.println("Successfully Construct Merge_control*");	
+		setLeftText(first);
+		setRightText(second);
+		setLineNum(pos);
+
+		System.out.println("                                     ");	
+		
+		System.out.println("Successfully Construct Merge_control");	
 		
 		/*call a function depend on 'i' (i==0 means user selected Merge to left)*/
 		if(i == 0)
-			MergetoLeft(first,second,lineNum);
+			MergetoLeft();
 		else
-			MergetoRight(first,second,lineNum);
+			MergetoRight();
 		
 		
 		 
 	}	
+	
+	public void setLeftText(JTextPane first) {
+		this.first = first;
+	}
+	public void setRightText(JTextPane second) {
+		this.second = second;
+	}
+	public JTextPane getLeftText()
+	{
+		return this.first;
+	}
+	public JTextPane getRightText()
+	{
+		return this.second;
+	}
 
-	
-	
-	private void MergetoRight(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
-		System.out.println("Enter the MergetoRIGHT*");
+	/*this function return line Number from pos(where user clicked)*/
+	private void setLineNum(int pos)
+	{
+		int lineCount = (pos==0) ? 1 : 0;
+        try {
+            int offs=pos;
+            while( offs>0) {
+                offs=Utilities.getRowStart(first,offs)-1;
+                lineCount++;
+            }
+            lineNum = lineCount;
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }     
+	}
+	private void MergetoRight() throws BadLocationException {
+		System.out.println("-----Run Merge to Right-----");
 		StyledDocument doc1 = first.getStyledDocument();//get StyledDocument to get color
 		StyledDocument doc2 = second.getStyledDocument();		
 		Element root1 = doc1.getDefaultRootElement();//root1 stores element line by line
@@ -105,8 +144,8 @@ public class Merge_control {
 		}
 	
 	/*Same as Merge to Right */
-	private void MergetoLeft(JTextPane first,JTextPane second,int lineNum) throws BadLocationException {
-		System.out.println("Enter the MergetoLeft*");
+	private void MergetoLeft() throws BadLocationException {
+		System.out.println("-----Run Merge to Right-----");
 		StyledDocument doc1 = first.getStyledDocument();
 		StyledDocument doc2 = second.getStyledDocument();		
 		Element root1 = doc1.getDefaultRootElement();
@@ -174,19 +213,5 @@ public class Merge_control {
 		}
 		 
 		}
-	/*this function return line Number from pos(where user clicked)*/
-	private int getLineCount(JTextPane textPane, int pos)
-	{
-		int lineCount = (pos==0) ? 1 : 0;
-        try {
-            int offs=pos;
-            while( offs>0) {
-                offs=Utilities.getRowStart(textPane,offs)-1; // 오프셋으로 로우스타트 알 수 있음
-                lineCount++;
-            }
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-        return lineCount;      
-	}
+
 }
