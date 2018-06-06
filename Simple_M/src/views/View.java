@@ -68,7 +68,7 @@ public class View extends JFrame {
 		
 		Dimension dim = new Dimension(1200, 800);
 
-		JFrame view = new JFrame("gui");
+		JFrame view = new JFrame("SimpleMerge");
 		view.setBounds(120, 120, 1200, 800);
 		view.setPreferredSize(dim);
 
