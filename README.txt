@@ -1,5 +1,6 @@
-/***
 
+/***
+//+++++++++++++++++++Simple_M IS OUR FINAL PRODUCT+++++++++++++++++++++//
 CAU SE 2018 Spring Term Project: Development of SimpleMerge
 
 TEAM 12
