@@ -1,7 +1,4 @@
  package controllers;
- import models.*;
- import views.*;
- 
  import java.awt.Color;
  import java.io.*;
  import java.util.*;
@@ -33,11 +30,18 @@
  	private boolean forRemove = false;
  	private ArrayList<Character> temp = new ArrayList<Character>();
  	private ArrayList<Character> temp2 = new ArrayList<Character>();
- 
+ 	
+ 	private JTextPane fst;
+ 	private JTextPane sec;
+ 	
  	public Compare_control(JTextPane first, JTextPane second) throws IOException, Exception {
  
- 		StringReader read = new StringReader(first.getText());
- 		StringReader read2 = new StringReader(second.getText());
+ 		//LeftTextTest(first);//for test
+ 		setLeft(first);
+ 		setRight(second);
+ 		
+ 		StringReader read = new StringReader(fst.getText());
+ 		StringReader read2 = new StringReader(sec.getText());
  
  		BufferedReader reader = new BufferedReader(read);
  		BufferedReader reader2 = new BufferedReader(read2);
@@ -46,8 +50,8 @@
  		Scanner s2 = new Scanner(reader2);
  		int i;
  
- 		offset = getOffset(first);
- 		offset2 = getOffset(second);
+ 		offset = getOffset(fst);
+ 		offset2 = getOffset(sec);
  
  		/* If both files are empty. */
  		if (!s.hasNextLine() && !s2.hasNextLine()) {
@@ -64,43 +68,43 @@
  			right_num++;
  			left_num++;
  			if (lineNum == 1) {
- 				insert(first, Color.black, Color.black, "\n%");
- 				insert(second, Color.black, Color.black, "\n%");
+ 				insert(fst, Color.black, Color.black, "\n%");
+ 				insert(sec, Color.black, Color.black, "\n%");
  			}
  			/* both string are different */
  			if (LCS(line, line2) != MAX(line.length(), line2.length())) {
  				isEqual2 = false;
  				if (line_check(line, line2)) {
- 					insert(first, Color.red, Color.YELLOW, line);
- 					insert(second, Color.red, Color.YELLOW, line2);
+ 					insert(fst, Color.red, Color.YELLOW, line);
+ 					insert(sec, Color.red, Color.YELLOW, line2);
  				} else {
  					if (line.length() != 0 && line2.length() != 0) {
- 						rightHas = hasEqual(right_num, line, second);
- 						leftHas = hasEqual(left_num, line2, first);
+ 						rightHas = hasEqual(right_num, line, sec);
+ 						leftHas = hasEqual(left_num, line2, fst);
  
  						if (rightHas == right_num && leftHas == left_num) {
- 							inLineDiff(line, line2, first, second);
- 							insert(first, Color.black, Color.black, "");
- 							insert(second, Color.black, Color.black, "");
+ 							inLineDiff(line, line2, fst, sec);
+ 							insert(fst, Color.black, Color.black, "");
+ 							insert(sec, Color.black, Color.black, "");
  
  						} else {
  							if (rightHas == right_num && leftHas != left_num) {
  								spaceNum = leftHas - left_num;
  								for (i = 0; i < spaceNum; i++) {
  									if (line.length() != 0) {
- 										insert(first, Color.red, Color.YELLOW, line);
+ 										insert(fst, Color.red, Color.YELLOW, line);
  									} else {
- 										insert(first, Color.red, Color.YELLOW, whenNull);
+ 										insert(fst, Color.red, Color.YELLOW, whenNull);
  									}
- 									insert(second, Color.red, Color.GRAY, whenNull);
+ 									insert(sec, Color.red, Color.GRAY, whenNull);
  									if (s.hasNextLine()) {
  										line = s.nextLine();
  										left_num++;
  									}
  								}
  								lineNum += spaceNum;
- 								insert(first, Color.BLACK, Color.WHITE, line);
- 								insert(second, Color.BLACK, Color.WHITE, line2);
+ 								insert(fst, Color.BLACK, Color.WHITE, line);
+ 								insert(sec, Color.BLACK, Color.WHITE, line2);
  
  							}
  
@@ -108,102 +112,102 @@
  								spaceNum = rightHas - right_num;
  								for (i = 0; i < spaceNum; i++) {
  									if (line2.length() != 0) {
- 										insert(second, Color.red, Color.YELLOW, line2);
+ 										insert(sec, Color.red, Color.YELLOW, line2);
  									} else {
- 										insert(second, Color.red, Color.YELLOW, whenNull);
+ 										insert(sec, Color.red, Color.YELLOW, whenNull);
  									}
- 									insert(first, Color.red, Color.GRAY, whenNull);
+ 									insert(fst, Color.red, Color.GRAY, whenNull);
  									if (s2.hasNextLine()) {
  										line2 = s2.nextLine();
  										right_num++;
  									}
  								}
  								lineNum += spaceNum;
- 								insert(first, Color.BLACK, Color.WHITE, line);
- 								insert(second, Color.BLACK, Color.WHITE, line2);
+ 								insert(fst, Color.BLACK, Color.WHITE, line);
+ 								insert(sec, Color.BLACK, Color.WHITE, line2);
  
  							} else {
  								spaceNum = leftHas - left_num;
  								for (i = 0; i < spaceNum; i++) {
  									if (line.length() != 0) {
- 										insert(first, Color.red, Color.YELLOW, line);
+ 										insert(fst, Color.red, Color.YELLOW, line);
  									} else {
- 										insert(first, Color.red, Color.YELLOW, whenNull);
+ 										insert(fst, Color.red, Color.YELLOW, whenNull);
  									}
- 									insert(second, Color.red, Color.GRAY, whenNull);
+ 									insert(sec, Color.red, Color.GRAY, whenNull);
  									if (s.hasNextLine()) {
  										line = s.nextLine();
  										left_num++;
  									}
  								}
  								lineNum += spaceNum;
- 								insert(first, Color.BLACK, Color.WHITE, line);
- 								insert(second, Color.BLACK, Color.WHITE, line2);
+ 								insert(fst, Color.BLACK, Color.WHITE, line);
+ 								insert(sec, Color.BLACK, Color.WHITE, line2);
  							}
  						}
  
  					}
  
  					else if (line.length() == 0 && line2.length() != 0) {// if left line is empty and right is not.
- 						leftHas = hasEqual(left_num, line2, first);
+ 						leftHas = hasEqual(left_num, line2, fst);
  						if (leftHas == left_num) {// if there isn't same line with right line in left file, rewrite that
  													// two lines with coloring.
- 							insert(first, Color.red, Color.YELLOW, whenNull);
- 							insert(second, Color.red, Color.YELLOW, line2);
+ 							insert(fst, Color.red, Color.YELLOW, whenNull);
+ 							insert(sec, Color.red, Color.YELLOW, line2);
  						} else {// if there is same line with right line in left file, add empty line with
  								// yellow coloring in left file.
  							spaceNum = leftHas - left_num;
  							for (i = 0; i < spaceNum; i++) {
  								if (line.length() != 0) {
- 									insert(first, Color.red, Color.YELLOW, line);
+ 									insert(fst, Color.red, Color.YELLOW, line);
  								} else {
- 									insert(first, Color.red, Color.YELLOW, whenNull);
+ 									insert(fst, Color.red, Color.YELLOW, whenNull);
  								}
  
- 								insert(second, Color.red, Color.GRAY, whenNull);
+ 								insert(sec, Color.red, Color.GRAY, whenNull);
  								if (s.hasNextLine()) {
  									line = s.nextLine();
  									left_num++;
  								}
  							}
  							lineNum += spaceNum;
- 							insert(first, Color.BLACK, Color.WHITE, line);
- 							insert(second, Color.BLACK, Color.WHITE, line2);
+ 							insert(fst, Color.BLACK, Color.WHITE, line);
+ 							insert(sec, Color.BLACK, Color.WHITE, line2);
  
  						}
  					} else {// if right line is empty and left is not.
- 						rightHas = hasEqual(right_num, line, second);
+ 						rightHas = hasEqual(right_num, line, sec);
  						if (rightHas == right_num) {// if there isn't same line with left line in riht file, rewrite
  													// that two lines with coloring.
- 							insert(first, Color.red, Color.YELLOW, line);
- 							insert(second, Color.red, Color.YELLOW, whenNull);
+ 							insert(fst, Color.red, Color.YELLOW, line);
+ 							insert(sec, Color.red, Color.YELLOW, whenNull);
  						} else {// if there is same line with left line in right file, add empty line with
  								// yellow coloring in right file.
  							spaceNum = rightHas - right_num;
  							for (i = 0; i < spaceNum; i++) {
  								if (line2.length() != 0) {
- 									insert(second, Color.red, Color.YELLOW, line);
+ 									insert(sec, Color.red, Color.YELLOW, line);
  								} else {
- 									insert(second, Color.red, Color.YELLOW, whenNull);
+ 									insert(sec, Color.red, Color.YELLOW, whenNull);
  								}
  
- 								insert(first, Color.red, Color.GRAY, whenNull);
+ 								insert(fst, Color.red, Color.GRAY, whenNull);
  								if (s2.hasNextLine()) {
  									line2 = s2.nextLine();
  									right_num++;
  								}
  							}
  							lineNum += spaceNum;
- 							insert(first, Color.BLACK, Color.WHITE, line);
- 							insert(second, Color.BLACK, Color.WHITE, line2);
+ 							insert(fst, Color.BLACK, Color.WHITE, line);
+ 							insert(sec, Color.BLACK, Color.WHITE, line2);
  						}
  					}
  				}
  			}
  
  			else {
- 				insert(first, Color.BLACK, Color.WHITE, line);
- 				insert(second, Color.BLACK, Color.WHITE, line2);
+ 				insert(fst, Color.BLACK, Color.WHITE, line);
+ 				insert(sec, Color.BLACK, Color.WHITE, line2);
  			}
  
  		}
@@ -211,25 +215,25 @@
  		/*if one file is longer than the other one, add rest part of the file with coloring at the end.*/
  		while(s.hasNextLine()){
  			line = s.nextLine();
- 			insert(first, Color.red, Color.YELLOW, line);
- 			insert(second, Color.red, Color.GRAY, whenNull);
+ 			insert(fst, Color.red, Color.YELLOW, line);
+ 			insert(sec, Color.red, Color.GRAY, whenNull);
  			isEqual2 =false;
  		}
  		while(s2.hasNextLine()){
  			line2 = s2.nextLine();
- 			insert(second, Color.red, Color.YELLOW, line2);
- 			insert(first, Color.red, Color.GRAY, whenNull);
+ 			insert(sec, Color.red, Color.YELLOW, line2);
+ 			insert(fst, Color.red, Color.GRAY, whenNull);
  			isEqual2 =false;
  		}
  
  		if(forRemove)
  		{
- 			remove(first, offset + 3);
- 			remove(second, offset2 + 3);
+ 			remove(fst, offset + 3);
+ 			remove(sec, offset2 + 3);
  		}
  		else {
- 			remove(first, offset );
- 			remove(second, offset2);
+ 			remove(fst, offset );
+ 			remove(sec, offset2);
  		}
  		/*if two files are identical*/
  		if (isEqual2) {
@@ -264,7 +268,7 @@
  	private int MIN(int upper, int left) {
  		return upper < left ? upper : left;
  	}
- 	
+
  
  	/*
  	 * find line of same content from the other file, if there isn't, return
@@ -419,5 +423,25 @@
  		return false;
  
  	}
- 
+ 	
+ 	/*get or set the file*/
+ 	public JTextPane getLeft() {
+ 		return fst;
+ 	}
+ 	public JTextPane getRight() {
+ 		return sec;
+ 	}
+ 	private void setLeft(JTextPane a) {
+ 		this.fst = a;
+ 	}
+ 	private void setRight(JTextPane b) {
+ 		this.sec =b;
+ 	}
+ 	public void LeftTextTest(JTextPane first) {
+ 	      assert fst == getLeft() : "invalid left text";
+ 	   }
+ 	   public void RightTextTest(JTextPane second) {
+ 	      assert sec == getRight() : "invalid right text";
+ 	   }
+ 	   
  }
